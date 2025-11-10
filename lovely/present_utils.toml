@@ -1,0 +1,51 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Add toggle button to areas
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+card_count
+'''
+payload = '''
+card_count,
+(self == G.jokers or self == G.stocking_present) and {n=G.UIT.R, config = {align = 'cr', colour = G.C.CLEAR, padding = -0.5}, nodes = {
+    {n=G.UIT.C, config = {align = 'cm', r = 0.1, colour = G.C.RED, hover = true, button = 'toggle_jokers_presents', padding = 0.05, button_dist = -0.1, area == self}, nodes = {
+        {n=G.UIT.T, config = {text = 'Switch', scale = 0.2, colour = G.C.WHITE}}
+    }},
+    {n=G.UIT.C, config = {minw = 1.05}}
+}} or nil,
+'''
+
+# Align present area counter
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+self.children.area_uibox = UIBox{
+'''
+payload = '''
+if card_count and self == G.stocking_present then card_count.nodes = {{n=G.UIT.B, config={w = 0.1,h=0.25}}} end
+
+'''
+
+# Stop drawing
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+(self.config.type == 'deck' and self ~= G.deck) or
+'''
+payload = '''
+(self.config.type == 'stocking_stuffer_hide') or
+'''
+
