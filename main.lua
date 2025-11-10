@@ -137,7 +137,7 @@ for i=1, 12 do
         key = 'test'..i,
         pos = {x=i%3, y=0},
         developer = devs[i%#devs + 1].name,
-        dev_colour = devs[i%#devs + 1].colour,
+        dev_colour = devs[i%#devs + 1].colour
     })
 end
 
@@ -145,7 +145,7 @@ local stocking_stuffer_card_popup = G.UIDEF.card_h_popup
 function G.UIDEF.card_h_popup(card)
     local ret_val = stocking_stuffer_card_popup(card)
     local obj = card.config.center
-    if obj and obj.set and obj.set == 'stocking_present' then
+    if obj and obj.discovered and obj.set and obj.set == 'stocking_present' then
         local tag = {n=G.UIT.R, config = {align = 'tm'}, nodes = {
             {n=G.UIT.T, config={text = localize('stocking_stuffer_gift_tag'), shadow = true, colour = G.C.UI.BACKGROUND_WHITE, scale = 0.27}},
             {n=G.UIT.O, config={object = DynaText({
