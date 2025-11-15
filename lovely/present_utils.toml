@@ -126,3 +126,32 @@ config = {align=
     parent =self}
 '''
 
+# Adds present area to calculation pipelin
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+match_indent = true
+position = 'before'
+pattern = '''
+-- TARGET: add your own CardAreas for joker evaluation
+'''
+payload = '''
+table.insert(t, G.stocking_present)
+table.insert(t, 1, G.stocking_present)
+'''
+
+# Animate CardAreas during scoring
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+if extrafunc then extrafunc() end
+'''
+payload = '''
+if (card.area == G.jokers and StockingStuffer.states.slot_visible ~= 1) or (card.area == G.stocking_present and StockingStuffer.states.slot_visible ~= -1) then
+    StockingStuffer.states.toggled = true
+    G.FUNCS.toggle_jokers_presents()
+end
+'''

@@ -217,8 +217,8 @@ function StockingStuffer.animate_areas()
         ease_alignment('jokers', -4, true)
         ease_alignment('stocking_present', 0)
     else
-        ease_alignment('jokers', 0)
         ease_alignment('stocking_present', -4, true)
+        ease_alignment('jokers', 0)
     end
 end
 
@@ -264,8 +264,7 @@ end
 local stocking_stuffer_card_area_emplace = CardArea.emplace
 function CardArea:emplace(card, location, stay_flipped)
     if (self == G.jokers and StockingStuffer.states.slot_visible ~= 1) or (self == G.stocking_present and StockingStuffer.states.slot_visible ~= -1) then
-        StockingStuffer.states.slot_visible = StockingStuffer.states.slot_visible * -1
-        StockingStuffer.animate_areas()
+        G.FUNCS.toggle_jokers_presents()
         G.E_MANAGER:add_event(Event({
             trigger = 'immediate',
             func = function()
@@ -307,7 +306,16 @@ function Game.update_shop(self, dt)
     }))
 end
 
--- TODO: Calculation of stocking_present area
+local stocking_stuffer_card_juice_up = Card.juice_up
+function Card:juice_up(scale, rot)
+    if (self.area == G.jokers and StockingStuffer.states.slot_visible ~= 1) or (self.area == G.stocking_present and StockingStuffer.states.slot_visible ~= -1) then
+        G.FUNCS.toggle_jokers_presents()
+    end
+    stocking_stuffer_card_juice_up(self, scale, rot)
+end
+
+
+-- TODO: Calculation of stocking_present area animation switching needs delay
 
 -- TODO: ConsumableType for presents (hidden from collection)
 
