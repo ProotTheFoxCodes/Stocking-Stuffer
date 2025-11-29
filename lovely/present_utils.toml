@@ -200,6 +200,24 @@ elseif part.control.stocking then
                 scale = 0.24}},
           }}
 '''
+# Add before/after badge support
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+match_indent = true
+position = 'before'
+pattern = '''
+elseif part.control.X or part.control.B then
+'''
+payload = '''
+elseif part.control.stocking then
+     final_line[#final_line+1] = {n=G.UIT.C, config={align = "m", colour = assembled_string == 'before' and G.C.PURPLE or G.C.GOLD, r = 0.05, padding = 0.06, res = 0.45}, nodes={
+              {n=G.UIT.T, config={
+                text = ' '..localize('stocking_stuffer_'..assembled_string)..' ',
+                colour = G.C.UI.TEXT_LIGHT,
+                scale = 0.24}},
+          }}
+'''
 
 # Allow {stocking} to be a valid control
 [[patches]]

@@ -4,10 +4,10 @@ return {
             ["Santa Claus_stocking_snowglobe"] = {
                 name = 'Snow Globe',
                 text = {
-                    '{stocking}before{}',
-                    '{C:mult}+#1#{} Mult',
-                    '{stocking}after{}',
-                    '{C:chips}#2#{} Chips',
+                    {'{C:mult}+#1#{} Mult',
+                    '{stocking}before{}',},
+                    {'{C:chips}#2#{} Chips',
+                    '{stocking}after{}',}
                 }
             },
             ["Santa Claus_stocking_toy_train"] = {
