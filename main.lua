@@ -278,7 +278,8 @@ SMODS.Atlas({
     path = 'tree.png',
     px = 550, py = 800,
     atlas_table = 'ANIMATION_ATLAS',
-    frames = 8,
+    frames = 4,
+    fps = 5
 })
 
 --#endregion
@@ -307,7 +308,7 @@ StockingStuffer.custom_card_areas = function(game)
     
     game.christmas_tree = UIBox{
         definition = create_tree_hud(),
-        config = {align=('cl'), offset = {x=-7,y=0},major = G.ROOM_ATTACH}
+        config = {align=('cl'), offset = {x=-7,y=0.5},major = G.ROOM_ATTACH}
     }
     
     StockingStuffer.states.slot_visible = 1
