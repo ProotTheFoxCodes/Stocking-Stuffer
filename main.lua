@@ -257,7 +257,6 @@ StockingStuffer.colours = {
 --#region Atlases
 
 -- Default Atlas for presents without an atlas provided
--- TODO: Remove when finished?
 SMODS.Atlas({
     key = 'presents',
     path = 'presents.png',
@@ -272,8 +271,6 @@ SMODS.Atlas({
     py = 95
 })
 
-
--- TODO: Get proper art
 SMODS.Atlas({
     key = 'christmas_tree',
     path = 'tree.png',
