@@ -123,12 +123,4 @@ StockingStuffer.Present({
     developer = display_name,
     key = 'discard_bin',
     pos = { x = 3, y = 0 },
-    use = function(self, card)
-    end,
-    keep_on_use = function()
-        return false
-    end,
-    can_use = function(self, card)
-        return true
-    end,
 })

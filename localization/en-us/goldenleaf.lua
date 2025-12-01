@@ -13,7 +13,6 @@ return {
                     "{C:attention}Debuff",
                     "the present",
                     "to the left",
-                    "{C:inactive,s:0.8}(Use to remove this present)"
                 }
             },
             ["[REDACTED]Autumn_stocking_ultimatum"] = {
