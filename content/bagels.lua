@@ -33,6 +33,7 @@ StockingStuffer.Present {
 
     -- This retriggers 2s, 3s, 4s, and 5s, but I can't think of something better
     update = function(self)
+        if not G.jokers or not G.consumeables then return end
         for _, c in pairs(G.jokers.cards) do
             c:set_cost()
         end
