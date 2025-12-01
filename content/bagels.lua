@@ -14,8 +14,8 @@ StockingStuffer.Developer {
 
 StockingStuffer.WrappedPresent {
     developer = display_name,
-    pos = { x = 1, y = 0 },
-    atlas = 'presents' -- TODO
+    pos = { x = 0, y = 0 },
+    atlas = display_name .. '_presents'
 }
 
 --#region Gift Receipt

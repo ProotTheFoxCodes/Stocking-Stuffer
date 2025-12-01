@@ -10,14 +10,14 @@ return {
                 }
             }
         },
-        -- stocking_wrapped_present = {
-        --     template_stocking_present = {
-        --         name = '{V:1}Present',
-        --         text = {
-        --             '  {C:inactive}What could be inside?  ',
-        --             '{C:inactive}Open me to find out!'
-        --         }
-        --     },
-        -- }
+        stocking_wrapped_present = {
+            BakersDozenBagels_stocking_present = {
+                name = '{V:1}Garish Envelope',
+                text = {
+                    '  {C:inactive}What could be inside?  ',
+                    '{C:inactive}Open me to find out!'
+                }
+            },
+        }
     }
 }
