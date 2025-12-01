@@ -44,20 +44,21 @@ StockingStuffer.WrappedPresent({
     -- },
 })
 
+-- Kitty Seal
+SMODS.Seal{
+	key = "VMan_2002_kittyseal",
+	atlas = "VMan_2002_presents",
+	pos = {x = 8, y = 0},
+	badge_colour = HEX("FF3DEE")
+}
+
 -- Present Template - Replace 'template' with your name
 -- Note: You should make up to 5 Presents to fill your Wrapped Present!
 StockingStuffer.Present({
     developer = display_name, -- DO NOT CHANGE
 
-    key = 'filler_1', -- keys are prefixed with 'display_name_stocking_' for reference
-    -- You are encouraged to use the localization file for your name and description, this is here as an example
-    -- loc_txt = {
-    --     name = 'Example Present',
-    --     text = {
-    --         'Does nothing'
-    --     }
-    -- },
-    pos = { x = 0, y = 0 },
+    key = 'kittystickers', -- keys are prefixed with 'display_name_stocking_' for reference
+    pos = { x = 3, y = 0 },
     -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
 
 
@@ -72,6 +73,152 @@ StockingStuffer.Present({
     end,
     keep_on_use = function(self, card)
         -- return true when card should be kept
+    end,
+
+    loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = "stocking_VMan_2002_kittyseal"
+        return {
+            vars = { 1 },
+        }
+    end,
+
+    -- calculate is completely optional, delete if your present does not need it
+    calculate = function(self, card, context)
+        -- check context and return appropriate values
+        -- StockingStuffer.first_calculation is true before jokers are calculated
+        -- StockingStuffer.second_calculation is true after jokers are calculated
+        if context.joker_main then
+            return {
+                message = 'example'
+            }
+        end
+    end
+})
+
+StockingStuffer.Present({
+    developer = display_name, -- DO NOT CHANGE
+
+    key = 'mechanicalpencil',
+    pos = { x = 4, y = 0 },
+    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
+
+
+    -- use and can_use are completely optional, delete if you do not need your present to be usable
+    can_use = function(self, card)
+        -- check for use condition here
+        return true
+    end,
+    use = function(self, card, area, copier) 
+        -- do stuff here
+        print('example')
+    end,
+    keep_on_use = function(self, card)
+        return true
+    end,
+
+    -- calculate is completely optional, delete if your present does not need it
+    calculate = function(self, card, context)
+        -- check context and return appropriate values
+        -- StockingStuffer.first_calculation is true before jokers are calculated
+        -- StockingStuffer.second_calculation is true after jokers are calculated
+        if context.joker_main then
+            return {
+                message = 'example'
+            }
+        end
+    end
+})
+
+
+StockingStuffer.Present({
+    developer = display_name, -- DO NOT CHANGE
+
+    key = 'mechanicalpencil',
+    pos = { x = 5, y = 0 },
+    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
+
+
+    -- use and can_use are completely optional, delete if you do not need your present to be usable
+    can_use = function(self, card)
+        -- check for use condition here
+        return true
+    end,
+    use = function(self, card, area, copier) 
+        -- do stuff here
+        print('example')
+    end,
+    keep_on_use = function(self, card)
+        return true
+    end,
+
+    -- calculate is completely optional, delete if your present does not need it
+    calculate = function(self, card, context)
+        -- check context and return appropriate values
+        -- StockingStuffer.first_calculation is true before jokers are calculated
+        -- StockingStuffer.second_calculation is true after jokers are calculated
+        if context.joker_main then
+            return {
+                message = 'example'
+            }
+        end
+    end
+})
+
+
+StockingStuffer.Present({
+    developer = display_name, -- DO NOT CHANGE
+
+    key = 'mechanicalpencil',
+    pos = { x = 6, y = 0 },
+    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
+
+
+    -- use and can_use are completely optional, delete if you do not need your present to be usable
+    can_use = function(self, card)
+        -- check for use condition here
+        return true
+    end,
+    use = function(self, card, area, copier) 
+        -- do stuff here
+        print('example')
+    end,
+    keep_on_use = function(self, card)
+        return true
+    end,
+
+    -- calculate is completely optional, delete if your present does not need it
+    calculate = function(self, card, context)
+        -- check context and return appropriate values
+        -- StockingStuffer.first_calculation is true before jokers are calculated
+        -- StockingStuffer.second_calculation is true after jokers are calculated
+        if context.joker_main then
+            return {
+                message = 'example'
+            }
+        end
+    end
+})
+
+
+StockingStuffer.Present({
+    developer = display_name, -- DO NOT CHANGE
+
+    key = 'mechanicalpencil',
+    pos = { x = 7, y = 0 },
+    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
+
+
+    -- use and can_use are completely optional, delete if you do not need your present to be usable
+    can_use = function(self, card)
+        -- check for use condition here
+        return true
+    end,
+    use = function(self, card, area, copier) 
+        -- do stuff here
+        print('example')
+    end,
+    keep_on_use = function(self, card)
+        return true
     end,
 
     -- calculate is completely optional, delete if your present does not need it
