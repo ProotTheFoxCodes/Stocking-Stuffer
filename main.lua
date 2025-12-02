@@ -187,7 +187,7 @@ StockingStuffer.colours = {
                 table.insert(pool, present)
                 local count = 0
                 for _, filler in ipairs(G.P_CENTER_POOLS.stocking_present) do
-                    if filler.developer == present.developer then
+                    if filler.developer == present.developer and not filler.no_collection then
                         table.insert(pool, filler)
                         count = count + 1
                     end
@@ -654,6 +654,15 @@ local function load_files(path)
 end
 local path = SMODS.current_mod.path .. '/content'
 load_files(path)
+
+if Balatest then
+    function Balatest.open_present(key)
+        SMODS.add_card({ area = G.stocking_present, set = 'stocking_present', key = key })
+        Balatest.wait_for_input()
+        Balatest.q(function() end)
+    end
+    load_files(SMODS.current_mod.path .. '/tests')
+end
 
 --#endregion
 
