@@ -187,7 +187,7 @@ StockingStuffer.colours = {
                 table.insert(pool, present)
                 local count = 0
                 for _, filler in ipairs(G.P_CENTER_POOLS.stocking_present) do
-                    if filler.developer == present.developer then
+                    if filler.developer == present.developer and not filler.no_collection then
                         table.insert(pool, filler)
                         count = count + 1
                     end
