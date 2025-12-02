@@ -27,6 +27,8 @@ StockingStuffer.WrappedPresent({
     pos = { x = 0, y = 0 },
 })
 
+-- ULTIMATUM
+
 local function random_grinch()
     local g = math.floor(pseudorandom("pingas") + 0.5)
     local options = {
@@ -105,9 +107,11 @@ StockingStuffer.Present({
     end
 })
 
-local game_upd8_hook = Game.update
+-- DISCARD BIN
+
+local gupdate = Game.update
 function Game:update(dt, ...)
-    game_upd8_hook(self, dt, ...)
+    local ret = gupdate(self, dt, ...)
     if G and G.stocking_present and G.stocking_present.cards then
         local c_area = G.stocking_present.cards
         for k, v in ipairs(c_area) do
@@ -118,9 +122,96 @@ function Game:update(dt, ...)
             end
         end
     end
+    return ret
 end
+
 StockingStuffer.Present({
     developer = display_name,
     key = 'discard_bin',
     pos = { x = 3, y = 0 },
+})
+
+-- DITTO
+
+StockingStuffer.GlVars = {}
+local ss_calc_ref = SMODS.current_mod.calculate or function() return end
+SMODS.current_mod.calculate = function (self, context)
+    local ret = ss_calc_ref(self, context)
+    if context.end_of_round then
+        if not StockingStuffer.GlVars.DittoTransform and StockingStuffer.GlVars.DittoTransform ~= "Fuck!" then
+            StockingStuffer.GlVars.DittoTransform = true
+        end
+    end
+    if context.before then
+        StockingStuffer.GlVars.DittoTransform = nil
+    end
+    return ret
+end
+
+local gcu = generate_card_ui
+function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card) 
+    local ret = gcu(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
+    if card and card.ditto then
+        generate_card_ui({
+            set = "Other",
+            key = "gl_ditto"
+        }, ret)
+    end
+    return ret
+end
+local gupdate = Game.update
+function Game:update(dt, ...)
+    local ret = gupdate(self, dt, ...)
+    if G and G.stocking_present and G.stocking_present.cards then
+        local c_area = G.stocking_present.cards
+        local dittos = {}
+        for k, v in ipairs(c_area) do
+            if v.ditto then
+                table.insert(dittos, v)
+            end
+        end
+        if StockingStuffer.GlVars.DittoTransform == true and next(dittos) then
+            for k, ditto in ipairs(dittos) do
+                local transformkey = G.P_CENTER_POOLS.stocking_present[pseudorandom("j",1,#G.P_CENTER_POOLS.stocking_present)].key
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = function()  
+                        ditto:flip()
+                        play_sound('card1', percent)
+                        ditto:juice_up(0.3, 0.3)
+                        return true
+                    end
+                }))
+                delay(0.1)
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = function()  
+                        ditto:set_ability(transformkey)
+                        return true
+                    end
+                }))
+                delay(0.1)
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = function()  
+                        ditto:flip()
+                        play_sound('tarot2', percent, 0.6)
+                        ditto:juice_up(0.3, 0.3)
+                        return true
+                    end
+                }))
+            end
+            StockingStuffer.GlVars.DittoTransform = "Fuck!"
+        end
+    end
+    return ret
+end
+
+StockingStuffer.Present({
+    developer = display_name,
+    key = 'ditto',
+    pos = { x = 4, y = 0 },
+	add_to_deck = function (self, card, from_debuff)
+        card.ditto = true
+	end
 })

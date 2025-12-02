@@ -6,7 +6,26 @@ return {
         }
     },
     descriptions = {
+        Other = {
+            gl_ditto = {
+                name = "Ditto",
+                text = {
+                    "This present will",
+                    "{C:attention}transform{} into another ",
+                    "at the {C:attention}end of round{}"
+                }
+            },
+        },
         stocking_present = {
+            ["[REDACTED]Autumn_stocking_ditto"] = {
+                name = 'Ditto',
+                text = {
+                    "Transforms into",
+                    "a {C:attention}random present",
+                    "at the end of round",
+                    "{C:inactive}(Ditto after transformation)"
+                }
+            },
             ["[REDACTED]Autumn_stocking_discard_bin"] = {
                 name = 'Discard Bin',
                 text = {
@@ -37,7 +56,7 @@ return {
         },
         stocking_wrapped_present = {
             ["[REDACTED]Autumn_stocking_present"] = {
-                name = '{V:1}Present',
+                name = '{V:1}Tuckbox',
                 text = {
                     '{C:gl_pink,f:stocking_emoji}🍁{C:gl_pink}Some{C:gl_black}one {C:inactive}messed up',
                     '  {C:inactive}the paint on this present...  ',
