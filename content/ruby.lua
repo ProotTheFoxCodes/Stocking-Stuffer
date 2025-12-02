@@ -17,6 +17,13 @@ SMODS.Atlas({
     frames = 17
 })
 
+SMODS.Atlas({
+    key = display_name..'_merchandise',
+    path = 'ruby_merchandise.png',
+    px = 71,
+    py = 95,
+})
+
 local RUBY_GRADIENT = SMODS.Gradient {
     key = "ruby_gradient",
     colours = {
@@ -78,7 +85,6 @@ StockingStuffer.Present({
         end
     end
 })
-
 
 StockingStuffer.Present({
     developer = display_name,
@@ -242,15 +248,15 @@ local function get_random_joker(key_append)
         j_invisible = true, --requires more than 1 round
         j_todo_list = true, --more like togay list
         j_riff_raff = true, --weird TODO: fix
-        j_luchador = true --needs to be sold,
+        j_luchador = true, --needs to be sold,
+        j_riff_raff = true --until bug gets fixed
     }
     while center == 'UNAVAILABLE' or blacklist[center] do --some cards just dont work
         it = it + 1
         center = pseudorandom_element(_pool, pseudoseed(_pool_key..'_resample'..it))
     end
 
-    --return center
-    return G.GAME.debug_center
+    return center
 end
 
 
@@ -259,9 +265,10 @@ StockingStuffer.Present({
     developer = display_name,
 
     key = 'merchandise',
-    pos = { x = 4, y = 0 },
+    pos = { x = 0, y = 0 },
+    atlas = "Ruby_merchandise",
 
-    config = { extra = { joker = "j_joker", dummy_added = false } },
+    config = { extra = { joker = "j_joker", dummy_added = false, sprite_ind = -1 } },
   
     calculate = function(self, card, context)
         --intentionally triggers in both
@@ -309,6 +316,17 @@ StockingStuffer.Present({
             local ret = Card.calculate_dollar_bonus(card.dummy)
             card.ability.extra.dummy_abil = card.dummy.ability
             return ret
+        end
+    end,
+    set_ability = function(self, card, initial, delay)
+        if not G.SETTINGS.paused and card.ability.extra.sprite_ind and card.ability.extra.sprite_ind > 0 then
+            card.children.center:set_sprite_pos({x = card.ability.extra.sprite_ind, y = 0})
+        end
+    end,
+    add_to_deck = function(self, card)
+        card.ability.extra.sprite_ind = pseudorandom("ruby_merchandise_sprite", 0, 9)
+        if not G.SETTINGS.paused then
+            card.children.center:set_sprite_pos({x = card.ability.extra.sprite_ind, y = 0})
         end
     end
 })
