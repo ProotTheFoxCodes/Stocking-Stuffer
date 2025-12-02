@@ -4,7 +4,7 @@ return {
             Ruby_stocking_friendship_necklace = {
                 name = 'Friendship Necklace',
                 text = {
-                    'Played {C:attention}face{} cards',
+                    'Scored {C:attention}face{} cards',
                     'Gain a random {C:attention}Enhancement{}',
                     "{C:attention}Seal{} or {C:dark_edition}Edition{}",
                     "{stocking}before"
