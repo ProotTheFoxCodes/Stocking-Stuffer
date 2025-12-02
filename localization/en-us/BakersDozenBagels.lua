@@ -8,6 +8,19 @@ return {
                     'sell for {C:money}$#1#{} more',
                     "if they {C:red}weren't bought"
                 }
+            },
+            BakersDozenBagels_stocking_Origami = {
+                name = 'Origami',
+                text = {
+                    {
+                        '{C:white,X:mult}÷#1#{} Mult',
+                        '{stocking}before'
+                    },
+                    {
+                        '{C:white,X:mult}X#2#{} Mult',
+                        '{stocking}after'
+                    }
+                }
             }
         },
         stocking_wrapped_present = {

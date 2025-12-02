@@ -79,3 +79,33 @@ function Card:load(table, other)
 end
 
 --#endregion
+
+--#region Origami
+
+StockingStuffer.Present {
+    developer = display_name,
+
+    key = 'Origami',
+    pos = { x = 2, y = 0 },
+
+    config = { extra = { div = 2, mul = 3 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.div, card.ability.extra.mul } }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if StockingStuffer.first_calculation then
+                return {
+                    x_mult = 1 / card.ability.extra.div
+                }
+            elseif StockingStuffer.second_calculation then
+                return {
+                    x_mult = card.ability.extra.mul
+                }
+            end
+        end
+    end
+}
+
+--#endregion
