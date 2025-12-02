@@ -14,7 +14,7 @@ SMODS.Atlas({
     px = 71,
     py = 95,
     atlas_table = 'ANIMATION_ATLAS',
-    frames = 17
+    frames = 16
 })
 
 SMODS.Atlas({
@@ -362,10 +362,15 @@ StockingStuffer.Present({
             return ret
         end
     end,
-    set_ability = function(self, card, initial, delay)
-        if not G.SETTINGS.paused and card.ability.extra.sprite_ind and card.ability.extra.sprite_ind > 0 then
-            card.children.center:set_sprite_pos({x = card.ability.extra.sprite_ind, y = 0})
-        end
+    load = function(self, card, initial, delay)
+        G.E_MANAGER:add_event(Event{
+            func = function()
+                if card.ability.extra.sprite_ind and card.ability.extra.sprite_ind > 0 then
+                    card.children.center:set_sprite_pos({x = card.ability.extra.sprite_ind, y = 0})
+                end
+                return true
+            end
+        })
     end,
     add_to_deck = function(self, card)
         card.ability.extra.sprite_ind = pseudorandom("ruby_merchandise_sprite", 0, 9)
