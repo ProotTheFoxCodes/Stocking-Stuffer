@@ -24,6 +24,8 @@ SMODS.Atlas({
     py = 95,
 })
 
+local MERCHANDISE_FRAMES = 16
+
 local RUBY_GRADIENT = SMODS.Gradient {
     key = "ruby_gradient",
     colours = {
@@ -395,12 +397,23 @@ StockingStuffer.Present({
         })
     end,
     add_to_deck = function(self, card)
-        card.ability.extra.sprite_ind = pseudorandom("ruby_merchandise_sprite", 0, 9)
+        card.ability.extra.sprite_ind = pseudorandom("ruby_merchandise_sprite", 0, MERCHANDISE_FRAMES-1)
         if not G.SETTINGS.paused then
             card.children.center:set_sprite_pos({x = card.ability.extra.sprite_ind, y = 0})
         end
     end
 })
+
+local click_ref = Card.click
+function Card:click(...)
+    if self.config.center.key == "Ruby_stocking_merchandise" and not self.added_to_deck and G.SETTINGS.paused then
+        if self.ability.extra.sprite_ind == -1 then self.ability.extra.sprite_ind = 0 end
+        self.ability.extra.sprite_ind = (self.ability.extra.sprite_ind + 1) % MERCHANDISE_FRAMES
+        self:juice_up()
+        self.children.center:set_sprite_pos({x = self.ability.extra.sprite_ind, y = 0})
+    end
+    return click_ref(self, ...)
+end
 
 StockingStuffer.Present({
     developer = display_name,

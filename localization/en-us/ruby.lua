@@ -64,15 +64,17 @@ return {
                 }
             }
         },
-        -- stocking_wrapped_present = {
-        --     template_stocking_present = {
-        --         name = '{V:1}Present',
-        --         text = {
-        --             '  {C:inactive}What could be inside?  ',
-        --             '{C:inactive}Open me to find out!'
-        --         }
-        --     },
-        -- }
+        stocking_wrapped_present = {
+            Ruby_stocking_present = {
+                name = '{V:1}Present',
+                text = {
+                    'Hand prepared with {C:attention}Care{} ',
+                    'by a particular {C:red}Red{} Dog {C:red}<3{}',
+                    '{C:inactive}Open me to find out whats inside!',
+                    '{C:inactive,s:0.8}woof.'
+                }
+            },
+        }
     },
     misc = {
         dictionary = {
