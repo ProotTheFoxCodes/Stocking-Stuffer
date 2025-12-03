@@ -1,12 +1,18 @@
 return {
     descriptions = {
         stocking_present = {
-            ["ENNWAY!_stocking_localizedBlackHole"] = {
+            ["ENNWAY_stocking_localizedBlackHole"] = {
                 name = 'Localized Black Hole',
                 text = {
                     'Adds {C:mult}#2#{} levels to',
                     '{C:attention}last played poker hand',
                     '{C:inactive}(Currently: #1#)'
+                }
+            },
+            ["ENNWAY_stocking_twelveMonthGrok"] = {
+                name = '12-Month Grok Subscription',
+                text = {
+                    '{C:mult}+1{} {C:attention}ENNWAY\'s Rotoscoped Dancing Robot'
                 }
             }
         },
