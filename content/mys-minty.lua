@@ -53,7 +53,7 @@ StockingStuffer.Present({ --cute little jingle ball
     end,
     use = function(self, card, area, copier)
         return {
-            message = "Whee!"
+            message = localize("mintymas_whee")
         }
     end,
     keep_on_use = function(self, card)
@@ -83,7 +83,7 @@ StockingStuffer.Present({ --cute little jingle ball
                 end
 
                 return {
-                    message = "Whee!",
+                    message = localize("mintymas_whee"),
                     func = function ()
                         ease_hands_played(1)
                     end
@@ -296,7 +296,7 @@ StockingStuffer.Present({ --mysterious object (the wand, upside down)
                 }
                 card.ability.extra.type, _ = pseudorandom_element(possiblies, "mintymas_wand_function")
                 card.ability.extra.ready = true
-                message = "Got it!" --TODO localizify
+                message = localize("mintymas_gotit")
             end
             return {
                 message = message
@@ -420,7 +420,7 @@ StockingStuffer.Present({ --pitfall seed (joke on my choice of placeholder sprit
                     G.GAME.blind:disable()
                 end
                 return {
-                    message = "Gottem!", --TODO localizify this probably
+                    message = localize("mintymas_gottem"),
                     message_card = G.GAME.blind,
                     func = function ()
                         local dmg = pseudorandom("mintymas_pitfall_damage", card.ability.extra.mindmg, card.ability.extra.maxdmg)

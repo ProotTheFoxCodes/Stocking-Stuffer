@@ -276,11 +276,14 @@ return {
             mintymas_hmm3 = "Huh...",
             mintymas_hmm4 = "Curious...",
             mintymas_hmm5 = "...?",
+            mintymas_gotit = "Got it!",
             mintymas_admire1 = "Cool!",
             mintymas_admire2 = "Neat!",
             mintymas_admire3 = "Shiny!",
             mintymas_admire4 = "Oooh!",
             mintymas_admire5 = "Rad!",
+            mintymas_whee = "Whee!",
+            mintymas_gottem = "Gottem!",
         }
     }
 }
