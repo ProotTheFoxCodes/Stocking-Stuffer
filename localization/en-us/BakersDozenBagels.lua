@@ -21,6 +21,65 @@ return {
                         '{stocking}after'
                     }
                 }
+            },
+            BakersDozenBagels_stocking_IOU = {
+                name = 'IOU',
+                text = {
+                    '{C:inactive}Wait a round...'
+                }
+            },
+            BakersDozenBagels_stocking_IOU_A = {
+                name = 'IOU',
+                text = {
+                    'Redeem for a',
+                    '{C:common}Common {C:attention}Joker',
+                    '{C:inactive}(Upgrades in 1 round)',
+                    '{stocking}usable'
+                }
+            },
+            BakersDozenBagels_stocking_IOU_B = {
+                name = 'IOU',
+                text = {
+                    'Redeem for an',
+                    '{C:uncommon}Uncommon {C:attention}Joker',
+                    '{C:inactive}(Upgrades in 2 rounds)',
+                    '{stocking}usable'
+                }
+            },
+            BakersDozenBagels_stocking_IOU_C = {
+                name = 'IOU',
+                text = {
+                    'Redeem for an',
+                    '{C:uncommon}Uncommon {C:attention}Joker',
+                    '{C:inactive}(Upgrades in 1 round)',
+                    '{stocking}usable'
+                }
+            },
+            BakersDozenBagels_stocking_IOU_D = {
+                name = 'IOU',
+                text = {
+                    'Redeem for a',
+                    '{C:rare}Rare {C:attention}Joker',
+                    '{C:inactive}(Upgrades in #1# rounds)',
+                    '{stocking}usable'
+                }
+            },
+            BakersDozenBagels_stocking_IOU_E = {
+                name = 'IOU',
+                text = {
+                    'Redeem for a',
+                    '{C:rare}Rare {C:attention}Joker',
+                    '{C:inactive}(Upgrades in 1 round)',
+                    '{stocking}usable'
+                }
+            },
+            BakersDozenBagels_stocking_IOU_F = {
+                name = 'IOU',
+                text = {
+                    'Redeem for a',
+                    '{C:legendary}Legendary {C:attention}Joker',
+                    '{stocking}usable'
+                }
             }
         },
         stocking_wrapped_present = {

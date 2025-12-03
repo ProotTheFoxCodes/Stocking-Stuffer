@@ -309,3 +309,159 @@ Balatest.TestPlay {
     end
 }
 --#endregion
+
+--#region IOU
+
+local rarities = {
+    [1] = 1,
+    [2] = 2,
+    [3] = 3,
+    [4] = 4,
+    Common = 1,
+    Uncommon = 2,
+    Rare = 3,
+    Legendary = 4
+}
+
+Balatest.TestPlay {
+    name = 'BakersDozenBagels_iou_0',
+    category = { 'BakersDozenBagels', 'BakersDozenBagels_iou' },
+
+    execute = function()
+        Balatest.open_present 'BakersDozenBagels_stocking_IOU'
+    end,
+    assert = function()
+        Balatest.assert(not G.stocking_present.cards[1]:can_use_consumeable())
+    end
+}
+Balatest.TestPlay {
+    name = 'BakersDozenBagels_iou_usable',
+    category = { 'BakersDozenBagels', 'BakersDozenBagels_iou' },
+
+    execute = function()
+        Balatest.open_present 'BakersDozenBagels_stocking_IOU'
+        Balatest.next_round()
+    end,
+    assert = function()
+        Balatest.assert(G.stocking_present.cards[1]:can_use_consumeable())
+    end
+}
+Balatest.TestPlay {
+    name = 'BakersDozenBagels_iou_1',
+    category = { 'BakersDozenBagels', 'BakersDozenBagels_iou' },
+
+    execute = function()
+        Balatest.open_present 'BakersDozenBagels_stocking_IOU'
+        Balatest.next_round()
+        Balatest.use(function() return G.stocking_present.cards[1] end)
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.stocking_present.cards, 0)
+        Balatest.assert_eq(#G.jokers.cards, 1)
+        Balatest.assert_eq(rarities[G.jokers.cards[1].config.center.rarity], 1)
+    end
+}
+Balatest.TestPlay {
+    name = 'BakersDozenBagels_iou_2',
+    category = { 'BakersDozenBagels', 'BakersDozenBagels_iou' },
+
+    execute = function()
+        Balatest.open_present 'BakersDozenBagels_stocking_IOU'
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.use(function() return G.stocking_present.cards[1] end)
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.stocking_present.cards, 0)
+        Balatest.assert_eq(#G.jokers.cards, 1)
+        Balatest.assert_eq(rarities[G.jokers.cards[1].config.center.rarity], 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'BakersDozenBagels_iou_3',
+    category = { 'BakersDozenBagels', 'BakersDozenBagels_iou' },
+
+    execute = function()
+        Balatest.open_present 'BakersDozenBagels_stocking_IOU'
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.use(function() return G.stocking_present.cards[1] end)
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.stocking_present.cards, 0)
+        Balatest.assert_eq(#G.jokers.cards, 1)
+        Balatest.assert_eq(rarities[G.jokers.cards[1].config.center.rarity], 2)
+    end
+}
+Balatest.TestPlay {
+    name = 'BakersDozenBagels_iou_4',
+    category = { 'BakersDozenBagels', 'BakersDozenBagels_iou' },
+
+    execute = function()
+        Balatest.open_present 'BakersDozenBagels_stocking_IOU'
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.use(function() return G.stocking_present.cards[1] end)
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.stocking_present.cards, 0)
+        Balatest.assert_eq(#G.jokers.cards, 1)
+        Balatest.assert_eq(rarities[G.jokers.cards[1].config.center.rarity], 3)
+    end
+}
+Balatest.TestPlay {
+    name = 'BakersDozenBagels_iou_11',
+    category = { 'BakersDozenBagels', 'BakersDozenBagels_iou' },
+
+    execute = function()
+        Balatest.open_present 'BakersDozenBagels_stocking_IOU'
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.use(function() return G.stocking_present.cards[1] end)
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.stocking_present.cards, 0)
+        Balatest.assert_eq(#G.jokers.cards, 1)
+        Balatest.assert_eq(rarities[G.jokers.cards[1].config.center.rarity], 3)
+    end
+}
+Balatest.TestPlay {
+    name = 'BakersDozenBagels_iou_12',
+    category = { 'BakersDozenBagels', 'BakersDozenBagels_iou' },
+
+    execute = function()
+        Balatest.open_present 'BakersDozenBagels_stocking_IOU'
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.next_round()
+        Balatest.use(function() return G.stocking_present.cards[1] end)
+    end,
+    assert = function()
+        Balatest.assert_eq(#G.stocking_present.cards, 0)
+        Balatest.assert_eq(#G.jokers.cards, 1)
+        Balatest.assert_eq(rarities[G.jokers.cards[1].config.center.rarity], 4)
+    end
+}
+
+--#endregion

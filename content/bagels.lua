@@ -118,3 +118,65 @@ StockingStuffer.Present {
 }
 
 --#endregion
+
+--#region IOU
+StockingStuffer.Present {
+    developer = display_name,
+
+    key = 'IOU',
+    pos = { x = 3, y = 0 },
+
+    display_size = { w = 71, h = 95 },
+    pixel_size = { w = 71 * 71 / 103, h = 95 },
+
+    config = { extra = 0 },
+    loc_vars = function(self, info_queue, card)
+        if card.ability.extra >= 4 and card.ability.extra < 11 then
+            return { key = 'BakersDozenBagels_stocking_IOU_D', vars = { 12 - card.ability.extra } }
+        elseif card.ability.extra >= 12 then
+            return { key = 'BakersDozenBagels_stocking_IOU_F' }
+        end
+        return ({
+            [1] = { key = 'BakersDozenBagels_stocking_IOU_A' },
+            [2] = { key = 'BakersDozenBagels_stocking_IOU_B' },
+            [3] = { key = 'BakersDozenBagels_stocking_IOU_C' },
+            [11] = { key = 'BakersDozenBagels_stocking_IOU_E' },
+        })[card.ability.extra]
+    end,
+
+    can_use = function(self, card)
+        return card.ability.extra > 0
+    end,
+    use = function(self, card)
+        local rarity = ({ [1] = 'Common', [2] = 'Uncommon', [3] = 'Uncommon' })[card.ability.extra]
+        if not rarity and card.ability.extra < 12 then
+            rarity = 'Rare'
+        elseif not rarity then
+            rarity = 'Legendary'
+        end
+
+        G.E_MANAGER:add_event(Event {
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('timpani')
+                SMODS.add_card { set = 'Joker', rarity = rarity }
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        })
+        delay(0.6)
+    end,
+
+    calculate = function(self, card, context)
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint and StockingStuffer.first_calculation then
+            card.ability.extra = card.ability.extra + 1
+            if ({ [1] = true, [2] = true, [4] = true, [12] = true })[card.ability.extra] then
+                return {
+                    message = localize 'k_upgrade_ex'
+                }
+            end
+        end
+    end
+}
+--#endregion
