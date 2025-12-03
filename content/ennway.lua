@@ -1,8 +1,5 @@
 local display_name = 'ENNWAY'
 
--- Present Atlas Template
--- Note: You are allowed to create more than one atlas if you need to use weird dimensions
--- We recommend you name your atlas with your display_name included
 SMODS.Atlas({
     key = display_name..'_presents',
     path = display_name..'_presents.png',
@@ -117,7 +114,7 @@ StockingStuffer.Present({
 
     key = 'coolEmoji',
     pos = { x = 3, y = 0 },
-    config = { charge = 0, currentchips = 0 },
+    config = { chargegain = 2, charge = 0, currentchips = 0 },
     can_use = function(self, card)
         return card.ability.charge > 0 and G.STATE == G.STATES.SELECTING_HAND
     end,
@@ -143,6 +140,7 @@ StockingStuffer.Present({
             vars = {
                 card.ability.charge,
                 card.ability.currentchips,
+                card.ability.chargegain,
                 colours = { 
                     ennway_ChargeColor
                 }
@@ -151,16 +149,16 @@ StockingStuffer.Present({
     end,
     calculate = function(self, card, context)
         card.ability.currentchips = math.floor(G.GAME.blind.chips * (card.ability.charge / 100))
-        if context.individual and context.cardarea == G.play and not context.end_of_round then
+        if context.individual and context.cardarea == G.play and not context.end_of_round and StockingStuffer.first_calculation then
             if context.other_card:is_face() then
                 G.E_MANAGER:add_event(Event({
                     func = function()
-                        card.ability.charge = card.ability.charge + 5
+                        card.ability.charge = card.ability.charge + card.ability.chargegain
                         return true
                     end
                 }))
                 return {
-                    message = "+5% Charge",
+                    message = "+"..card.ability.chargegain.."% Charge",
                     colour = ennway_ChargeColor
                 }
             end
