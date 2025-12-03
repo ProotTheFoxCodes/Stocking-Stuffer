@@ -118,7 +118,7 @@ StockingStuffer.Present({
             func = function()
                 local pack = SMODS.add_booster_to_shop(new_booster) --(context.card.config.center.key)
                 pack.states.visible = nil
-                pack.ability.j8mod_booster_copy = true
+                pack.ability.stocking_j8bit_booster_copy = true
                 pack.cost = pack.cost * 2
                 G.E_MANAGER:add_event(Event({
                     delay = 0.25,
@@ -144,7 +144,7 @@ StockingStuffer.Present({
         -- check context and return appropriate values
         -- StockingStuffer.first_calculation is true before jokers are calculated
         -- StockingStuffer.second_calculation is true after jokers are calculated
-        if context.open_booster and StockingStuffer.second_calculation and not context.card.ability.j8mod_booster_copy and not context.blueprint then
+        if context.open_booster and StockingStuffer.second_calculation and not context.card.ability.stocking_j8bit_booster_copy and not context.blueprint then
             --print("-PRINTING CENTER-")
             --print(context.card.config.center)
             card.ability.extra.saved_booster = context.card.config.center.key
@@ -174,6 +174,7 @@ StockingStuffer.Present({
     pos = { x = 2, y = 0 },
     pixel_size = { w = 65, h = 85 },
     config = { extra = { xchips = 1, xchips_inc = 0.01, check_edition = "e_foil" } },
+    disable_use_animation = true,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.extra.check_edition]
         return { vars = { card.ability.extra.xchips, card.ability.extra.xchips_inc, localize { type = 'name_text', key = card.ability.extra.check_edition, set = 'Edition' } } }
@@ -185,16 +186,28 @@ StockingStuffer.Present({
         -- StockingStuffer.second_calculation is true after jokers are calculated
         if context.before and not context.blueprint and StockingStuffer.first_calculation then
             local foiled = {}
+            local me = card
             for _, scored_card in ipairs(context.scoring_hand) do
                 if scored_card.edition and scored_card.edition.key == card.ability.extra.check_edition and not scored_card.debuff and not scored_card.j8_present_cracked then
                     foiled[#foiled + 1] = scored_card
                     scored_card.j8_present_cracked = true
+                    scored_card:set_edition(nil, true, false)
+                    G.E_MANAGER:add_event(Event({
+                        trigger = "immediate",
+                        blocking = false,
+                        blockable = false,
+                        func = function()
+                            scored_card:set_edition(card.ability.extra.check_edition, true, false)
+                            return true
+                        end
+                    }))
                     G.E_MANAGER:add_event(Event({
                         trigger = "after",
                         delay = 0.25,
                         func = function()
-                            scored_card:set_edition(nil, true)
+                            scored_card:set_edition(nil, true, false)
                             scored_card:juice_up()
+                            me:juice_up()
                             scored_card.j8_present_cracked = nil
                             return true
                         end
@@ -226,15 +239,69 @@ StockingStuffer.Present({
     key = 'label_maker',      -- keys are prefixed with 'display_name_stocking_' for reference
     pos = { x = 3, y = 0 },
     pixel_size = { w = 57, h = 68 },
-
+    config = { extra = { active = true } },
+    loc_vars = function(self, info_queue, card)
+        local main_end = nil
+        if card.area and card.area == G.stocking_present then
+            local disableable = card.ability.extra.active
+            main_end = {
+                {
+                    n = G.UIT.C,
+                    config = { align = "bm", minh = 0.4 },
+                    nodes = {
+                        {
+                            n = G.UIT.C,
+                            config = { ref_table = card, align = "m", colour = disableable and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06 },
+                            nodes = {
+                                { n = G.UIT.T, config = { text = ' ' .. localize("J8-Bit_stocking_" .. (disableable and 'active' or 'inactive')) .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.9 } },
+                            }
+                        }
+                    }
+                }
+            }
+        end
+        return { main_end = main_end }
+    end,
     -- use and can_use are completely optional, delete if you do not need your present to be usable
+    disable_use_animation = true,
     can_use = function(self, card)
         -- check for use condition here
-        return true
+        return card.ability.extra.active
     end,
     use = function(self, card, area, copier)
-        -- do stuff here
-        print('example')
+        card.ability.extra.active = false
+        G.E_MANAGER:add_event(Event({
+            trigger = "immediate",
+            func = function()
+                --print("making tag")
+                --- Credits to Eremel
+                local tag_pool = get_current_pool('Tag')
+                local selected_tag = pseudorandom_element(tag_pool, 'stocking_j8bit_label_maker')
+                local it = 1
+                while selected_tag == 'UNAVAILABLE' do
+                    it = it + 1
+                    selected_tag = pseudorandom_element(tag_pool, 'stocking_j8bit_label_maker' .. it)
+                end
+                local tag = Tag(selected_tag)
+                if tag.name == "Orbital Tag" then
+                    local _poker_hands = {}
+                    for k, v in pairs(G.GAME.hands) do
+                        if v.visible then
+                            _poker_hands[#_poker_hands + 1] = k
+                        end
+                    end
+                    tag.ability.orbital_hand = pseudorandom_element(_poker_hands,
+                        "stocking_j8bit_label_maker")
+                end
+                tag:set_ability()
+                add_tag(tag)
+                return true
+            end
+        }))
+        return {
+            message = localize("J8-Bit_stocking_tagged"),
+            colour = G.C.GREEN
+        }
     end,
     keep_on_use = function(self, card)
         -- return true when card should be kept
@@ -246,9 +313,13 @@ StockingStuffer.Present({
         -- check context and return appropriate values
         -- StockingStuffer.first_calculation is true before jokers are calculated
         -- StockingStuffer.second_calculation is true after jokers are calculated
-        if context.joker_main then
+        local end_of_ante = context.end_of_round and context.game_over == false and context.main_eval and
+            context.beat_boss
+        if end_of_ante and not context.blueprint and StockingStuffer.second_calculation then
+            card.ability.extra.active = true
             return {
-                message = 'example'
+                message = localize('k_active_ex'),
+                colour = G.C.GREEN
             }
         end
     end

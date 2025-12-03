@@ -2,6 +2,9 @@ return {
     misc = {
         dictionary = {
             ["J8-Bit_stocking_sealed"] = 'Sealed!',
+            ["J8-Bit_stocking_tagged"] = 'Tagged!',
+            ["J8-Bit_stocking_active"] = 'active',
+            ["J8-Bit_stocking_inactive"] = 'inactive',
         }
     },
     descriptions = {
@@ -71,7 +74,7 @@ return {
                 name = 'Mystery Sack',
                 text = {
                     "{C:inactive}How'd he get this",
-                    "thing in here!?"
+                    "{C:inactive}thing in here!?"
                 }
             },
         }
