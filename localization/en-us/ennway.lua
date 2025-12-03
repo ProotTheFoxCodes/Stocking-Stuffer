@@ -14,6 +14,24 @@ return {
                 text = {
                     '{C:mult}+1{} {C:attention}ENNWAY\'s Rotoscoped Dancing Robot'
                 }
+            },
+            ["ENNWAY_stocking_coolEmoji"] = {
+                name = 'Cool Emoji',
+                text = {
+                    {'{C:chips}-#1#{} Chips',
+                    '{stocking}before{}',},
+                    {'{X:chips,C:white}X#2#{} Chips',
+                    '{stocking}after{}',}
+                }
+            },
+            ["ENNWAY_stocking_lapisLazuli"] = {
+                name = 'Lapis Lazuli',
+                text = {
+                    {'{C:chips}-#1#{} Chips',
+                    '{stocking}before{}',},
+                    {'{X:chips,C:white}X#2#{} Chips',
+                    '{stocking}after{}',}
+                }
             }
         },
         -- stocking_wrapped_present = {

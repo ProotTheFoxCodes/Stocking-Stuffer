@@ -68,29 +68,9 @@ StockingStuffer.Present({
     end
 })
 
-function create_rotoscoped_dancing_robot()
-    local tree_sprite = AnimatedSprite(0, 0, 2, 2, G.ANIMATION_ATLAS['stocking_ennway_rotoscoped_dancing_robot'])
-
-    G.GAME.ennways_rotoscoped_dancing_robot = UIBox{
-        definition = {
-            n=G.UIT.ROOT, config = {align = "bl", padding = 0.0, colour = G.C.CLEAR}, nodes={
-            {n=G.UIT.R, config = {align = "bl", padding= 0.0, colour = G.C.CLEAR, r=0.1}, nodes={
-                {n=G.UIT.O, config = {object = tree_sprite, hover = true, juice = true, shadow = true}}
-            }}
-        }},
-        config = {align=('cm'), offset = {x=-9,y=6},major = G.ROOM_ATTACH}
-    };
-
-    play_sound('stocking_ennway_robot_sfx')
-
-    return G.GAME.ennways_rotoscoped_dancing_robot
-end
-
 -- 12-Month Grok Subscription
 StockingStuffer.Present({
     developer = display_name,
-
-    config = {extra = {chips = 1}},
 
     key = 'twelveMonthGrok',
     pos = { x = 2, y = 0 },
@@ -109,4 +89,83 @@ StockingStuffer.Present({
     keep_on_use = function(self, card)
         return false
     end
+})
+
+-- ENNWAY's Rotoscoped Dancing Robot
+function create_rotoscoped_dancing_robot()
+    local tree_sprite = AnimatedSprite(0, 0, 2, 2, G.ANIMATION_ATLAS['stocking_ennway_rotoscoped_dancing_robot'])
+
+    G.GAME.ennways_rotoscoped_dancing_robot = UIBox{
+        definition = {
+            n=G.UIT.ROOT, config = {align = "bl", padding = 0.0, colour = G.C.CLEAR}, nodes={
+            {n=G.UIT.R, config = {align = "bl", padding= 0.0, colour = G.C.CLEAR, r=0.1}, nodes={
+                {n=G.UIT.O, config = {object = tree_sprite, hover = true, juice = true, shadow = true}}
+            }}
+        }},
+        config = {align=('cm'), offset = {x=-9,y=6},major = G.ROOM_ATTACH}
+    };
+
+    play_sound('stocking_ennway_robot_sfx')
+
+    return G.GAME.ennways_rotoscoped_dancing_robot
+end
+
+-- Cool Emoji
+StockingStuffer.Present({
+    developer = display_name,
+
+    key = 'coolEmoji',
+    pos = { x = 3, y = 0 },
+    can_use = function(self, card)
+        return false
+    end,
+    use = function(self, card, area, copier) 
+        if StockingStuffer.first_calculation then
+            
+        elseif StockingStuffer.second_calculation then
+            
+        end
+    end,
+    keep_on_use = function(self, card)
+        
+    end,
+    calculate = function(self, card, context)
+
+    end
+})
+
+-- Lapis Lazuli
+StockingStuffer.Present({
+    developer = display_name,
+
+    config = { extra = { minusChips = 20, Xchips = 2 } },
+    key = 'lapisLazuli',
+    pos = { x = 4, y = 0 },
+    can_use = function(self, card)
+        return false
+    end,
+    use = function(self, card, area, copier) 
+    end,
+    keep_on_use = function(self, card)
+        
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if StockingStuffer.first_calculation then
+                return {
+                    chips = -card.ability.extra.minusChips
+                }
+            end
+            if StockingStuffer.second_calculation then
+                return {
+                    x_chips = card.ability.extra.Xchips
+                }
+            end
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { card.ability.extra.minusChips, card.ability.extra.Xchips },
+        }
+    end,
 })
