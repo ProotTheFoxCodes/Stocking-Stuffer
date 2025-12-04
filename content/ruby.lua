@@ -118,7 +118,7 @@ StockingStuffer.Present({
                     G.E_MANAGER:add_event(Event{
                         func = function()
                             v:juice_up()
-                            v:set_edition(SMODS.poll_edition({guaranteed = true, key_append = "ruby_present_necklace_edition"}))
+                            v:set_edition(SMODS.poll_edition({guaranteed = true, key_append = "ruby_present_necklace_edition", no_negative = true}))
                             return true
                         end
                     })

@@ -69,7 +69,7 @@ return {
                 name = '{V:1}Present',
                 text = {
                     'Hand prepared with {C:attention}Care{} ',
-                    'by a particular {C:red}Red{} Dog {C:red}<3{}',
+                    'by a particular  {C:red}Red{} Dog {C:red}<3{}',
                     '{C:inactive}Open me to find out whats inside!',
                     '{C:inactive,s:0.8}woof.'
                 }
