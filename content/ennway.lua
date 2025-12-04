@@ -122,7 +122,7 @@ StockingStuffer.Present({
 
     key = 'coolEmoji',
     pos = { x = 3, y = 0 },
-    config = { chargegain = 2, charge = 0, currentchips = 0 },
+    config = { chargegain = 2, charge = 0, currentchips = 0, everyOther = false },
     can_use = function(self, card)
         return card.ability.charge > 0 and G.STATE == G.STATES.SELECTING_HAND
     end,
@@ -135,7 +135,6 @@ StockingStuffer.Present({
                 G.GAME.chips = G.GAME.chips + card.ability.currentchips
 
                 G.hand_text_area.game_chips:juice_up()
-                G.hand_text_area.blind_chips:juice_up()
                 card.ability.charge = 0
                 card.ability.currentchips = 0
                 if G.GAME.blind.chips - G.GAME.chips < 0 then
@@ -177,9 +176,12 @@ StockingStuffer.Present({
         card.ability.currentchips = math.floor(G.GAME.blind.chips * (card.ability.charge / 100))
         if context.individual and context.cardarea == G.play and not context.end_of_round and StockingStuffer.first_calculation then
             if context.other_card:is_face() then
+                card.ability.everyOther = not card.ability.everyOther
                 G.E_MANAGER:add_event(Event({
                     func = function()
-                        card.ability.charge = card.ability.charge + card.ability.chargegain
+                        if card.ability.everyOther then
+                            card.ability.charge = card.ability.charge + card.ability.chargegain
+                        end
                         return true
                     end
                 }))
@@ -225,6 +227,60 @@ StockingStuffer.Present({
     loc_vars = function(self, info_queue, card)
         return {
             vars = { card.ability.extra.minusChips, card.ability.extra.Xchips },
+        }
+    end,
+})
+
+-- Gaming Chair
+local ennway_ChairColor = HEX('875B3A')
+StockingStuffer.Present({
+    developer = display_name,
+
+    config = { everyOther = true, minChipPercent = 25, maxChipPercent = 50, active = true, extra = { ch = 0, hitThreshold = false } },
+    key = 'gamingChair',
+    pos = { x = 5, y = 0 },
+    can_use = function(self, card)
+        return false
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if StockingStuffer.first_calculation and card.ability.active then
+                local blindchips = G.GAME.blind.chips
+                local gamechips = G.GAME.chips
+                local thresholdChips = (blindchips * (card.ability.minChipPercent / 100));
+
+                card.ability.extra.hitThreshold = gamechips < thresholdChips;
+                if card.ability.extra.hitThreshold then 
+                    card.ability.active = false 
+                    card.ability.extra.ch = (blindchips * (card.ability.maxChipPercent / 100))
+                    
+                    return {
+                        chips = card.ability.extra.ch,
+                        message = 'Stand up!',
+                        color = ennway_ChairColor
+                    }
+                end
+            end
+        elseif context.modify_ante and context.ante_end then
+            card.ability.everyOther = not card.ability.everyOther
+            card.ability.active = true
+            if (card.ability.everyOther) then
+            return {
+                message = 'Recharge!',
+                color = ennway_ChairColor
+            }
+            end
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+        local KEY = "ENNWAY_stocking_gamingChair"
+        if not card.ability.active then
+            KEY = "ENNWAY_stocking_gamingChair_alt"
+        end
+
+        return {
+            key = KEY,
+            vars = { colours = { ennway_ChargeColor }, card.ability.minChipPercent, card.ability.maxChipPercent }
         }
     end,
 })
