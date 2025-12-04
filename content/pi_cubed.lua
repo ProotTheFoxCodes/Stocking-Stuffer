@@ -359,7 +359,7 @@ StockingStuffer.Present({
         card.children.center:set_sprite_pos({x = card.ability.extra.card_art, y = 0})
     end,
     calculate = function(self, card, context)
-        if context.after and StockingStuffer.second_calculation then
+        if context.after and StockingStuffer.second_calculation and SMODS.pseudorandom_probability(card, 'pi_cubed_smallerwrappedpresent', 1, card.ability.extra.odds_denom) then
             local has_2 = false
             for k,v in ipairs(context.scoring_hand) do
                 if v:get_id() == 2 then
