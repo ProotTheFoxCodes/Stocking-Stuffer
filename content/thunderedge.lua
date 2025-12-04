@@ -25,11 +25,20 @@ SMODS.Atlas({
 	fps = 10,
 })
 
+local ThunderEdgeGradient = SMODS.Gradient({
+	key = "transmuted_gradient",
+	colours = {
+		HEX("89C41B"),
+		HEX("C5CC41"),
+	},
+	cycle = 1.5,
+})
+
 -- Developer Template
 -- Note: This object is how your WrappedPresent and Presents get linked
 StockingStuffer.Developer({
 	name = display_name, -- DO NOT CHANGE
-	colour = G.C.GREEN,
+	colour = ThunderEdgeGradient,
 })
 
 -- Wrapped Present Template
@@ -43,6 +52,7 @@ StockingStuffer.WrappedPresent({
 
 -- Present Template - Replace 'template' with your name
 -- Note: You should make up to 5 Presents to fill your Wrapped Present!
+
 StockingStuffer.Present({
 	developer = display_name, -- DO NOT CHANGE
 	key = "leek", -- keys are prefixed with 'display_name_stocking_' for reference
