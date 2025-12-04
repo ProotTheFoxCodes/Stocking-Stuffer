@@ -53,10 +53,82 @@ StockingStuffer.Present({
         -- check context and return appropriate values
         -- StockingStuffer.first_calculation is true before jokers are calculated
         -- StockingStuffer.second_calculation is true after jokers are calculated
-        if context.joker_main then
-            return {
-                message = 'example'
-            }
+        if context.selling_card and #G.hand.cards>0 and StockingStuffer.first_calculation then
+            for _,playingcard in ipairs(G.hand.cards) do
+                G.E_MANAGER:add_event(Event {
+                    trigger = 'after',
+                    delay = 0.4,
+                    func = function()
+                        play_sound(sound or 'tarot1')
+                        playingcard:juice_up(0.3, 0.5)
+                        card:juice_up(0.3,0.5)
+                        return true
+                    end
+                })
+                G.E_MANAGER:add_event(Event {
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function()
+                        playingcard:flip()
+                        play_sound('card1')
+                        playingcard:juice_up(0.3, 0.3)
+                        return true
+                    end
+                })
+                delay(0.2)
+                G.E_MANAGER:add_event(Event {
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function()
+                        local ranks = {}
+                        local suits = {}
+                        for i, v in pairs(SMODS.Ranks) do
+                            if not v.in_pool or v:in_pool({}) then ranks[#ranks+1] = i end
+                        end
+                        for i, v in pairs(SMODS.Suits) do
+                            if not v.in_pool or v:in_pool({}) then suits[#suits+1] = i end
+                        end
+                        SMODS.change_base(playingcard, pseudorandom_element(suits, pseudoseed("ath_roger")),pseudorandom_element(ranks, pseudoseed("ath_roger")), nil)
+                        return true
+                    end
+                })
+                if playingcard.ability.set == 'Enhanced' then
+                    G.E_MANAGER:add_event(Event{
+                        func = function()
+                            playingcard:set_ability(G.P_CENTERS[SMODS.poll_enhancement({guaranteed = true, key = "ath_roger"})])
+                            return true
+                        end
+                    })
+                end
+                if playingcard.seal then playingcard:set_seal(SMODS.poll_seal({guaranteed = true, key = "ath_roger"}),nil,true) end
+                if playingcard.edition then
+                    G.E_MANAGER:add_event(Event{
+                        func = function()
+                            playingcard:set_edition(SMODS.poll_edition({guaranteed = true, no_negative = true, key = "ath_roger"}))
+                            return true
+                        end
+                    })
+                end
+                G.E_MANAGER:add_event(Event {
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function()
+                        playingcard:flip()
+                        play_sound('tarot2', 100, 0.6)
+                        playingcard:juice_up(0.3, 0.3)
+
+                        -- Update the sprites of cards
+                        if playingcard.config and playingcard.config.center then
+                            playingcard:set_sprites(playingcard.config.center)
+                        end
+                        if playingcard.ability then
+                            playingcard.front_hidden = playingcard:should_hide_front()
+                        end
+
+                        return true
+                    end
+                })
+            end
         end
     end
 })
