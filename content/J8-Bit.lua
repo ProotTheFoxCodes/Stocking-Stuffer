@@ -203,7 +203,7 @@ StockingStuffer.Present({
     key = 'christmas_crack',  -- keys are prefixed with 'display_name_stocking_' for reference
     pos = { x = 2, y = 0 },
     pixel_size = { w = 66, h = 80 },
-    config = { extra = { xchips = 1, xchips_inc = 0.01, check_edition = "e_foil" } },
+    config = { extra = { xchips = 1, xchips_inc = 0.2, check_edition = "e_foil" } },
     disable_use_animation = true,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.extra.check_edition]
