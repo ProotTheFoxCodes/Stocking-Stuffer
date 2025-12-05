@@ -15,19 +15,7 @@ if eval.prevent_repetition == nil then
 end
 if next(SMODS.find_card("Soulware1_stocking_stack_overflow")) and not eval.prevent_repetition then 
     local stack_overflows = SMODS.find_card("Soulware1_stocking_stack_overflow")
-    local function dedup(t)
-        local res = {}
-        local hm = {}
-        for _, v in ipairs(t) do
-            if not hm[v] then
-                hm[v] = true
-                res[#res + 1] = v
-            end
-        end
-        return res
-    end
-    -- yet again, remove when the bug is fixed
-    stack_overflows = #dedup(stack_overflows)+1
+    stack_overflows = #stack_overflows+1
     -- most people would think the effect would multiply each repetition, so
 	eval.repetitions = eval.repetitions*stack_overflows
     eval.prevent_repetition = true
