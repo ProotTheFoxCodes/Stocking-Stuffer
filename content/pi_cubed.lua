@@ -67,11 +67,12 @@ StockingStuffer.WrappedPresent({
                     trigger = 'after',
                     func = (function() 
                         play_sound('stocking_splatpresent')
+                        G.SETTINGS.SOUND.music_volume = G.SETTINGS.SOUND.music_volume / 4
                         return true 
                     end)
                 }))
                 G.E_MANAGER:add_event(Event({
-                    trigger = 'ease', delay = 1,
+                    trigger = 'ease', delay = 1 * G.SETTINGS.GAMESPEED,
                     ref_table = G.gift.T, ref_value = 'y',
                     ease_to = G.play.T.y,
                     func = (function(t) return t end)
@@ -88,6 +89,7 @@ StockingStuffer.WrappedPresent({
                     trigger = 'immediate',
                     func = function()
                         draw_card(G.gift, G.stocking_present, nil, 'up', nil, gift)
+                        G.SETTINGS.SOUND.music_volume = math.min(100, G.SETTINGS.SOUND.music_volume * 4)
                         return true
                     end
                 }))
