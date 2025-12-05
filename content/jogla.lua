@@ -149,8 +149,7 @@ StockingStuffer.Present({
             G.GAME.hands[text].chips = t_mult
             G.GAME.hands[text].mult = t_chips
             G.E_MANAGER:add_event(Event{func = function () 
-                level_up_hand(card,text,true,-1)
-                level_up_hand(card,text,true,1)
+                level_up_hand(card,text,true,0)
             return true end})
             return {
                 chips = mult - hand_chips,
