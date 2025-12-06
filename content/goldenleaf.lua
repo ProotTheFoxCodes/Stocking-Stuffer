@@ -127,7 +127,7 @@ function Game:update(dt, ...)
     if G and G.stocking_present and G.stocking_present.cards then
         local c_area = G.stocking_present.cards
         for k, v in ipairs(c_area) do
-            if c_area[k + 1] and c_area[k + 1].config.center.key == "[REDACTED]Autumn_stocking_discard_bin" then
+            if c_area[k + 1] and (not c_area[k + 1].debuff) and c_area[k + 1].config.center.key == "[REDACTED]Autumn_stocking_discard_bin" then
                 SMODS.debuff_card(v, true, "discard_bin")
             else
                 SMODS.debuff_card(v, false, "discard_bin")
@@ -244,16 +244,20 @@ end
 
 -- GIC
     
+local gupdate = Game.update
+function Game:update(dt, ...)
+    local ret = gupdate(self, dt, ...)
+    if SMODS.find_card and G.P_CENTERS and G.P_CENTERS.p_stocking_present_select and G.P_CENTERS.p_stocking_present_select.config and G.P_CENTERS.p_stocking_present_select.config.choose then
+        local gics = SMODS.find_card("[REDACTED]Autumn_stocking_gic", false)
+        G.P_CENTERS.p_stocking_present_select.config.choose = 1 + #gics
+    end
+    return ret
+end
+
 StockingStuffer.Present({
     developer = display_name,
     key = 'gic',
-    pos = { x = 5, y = 0 },
-	add_to_deck = function (self, card, from_debuff)
-        G.P_CENTERS.p_stocking_present_select.config.choose = G.P_CENTERS.p_stocking_present_select.config.choose + 1
-    end,
-    remove_from_deck =  function (self, card, from_debuff)
-        G.P_CENTERS.p_stocking_present_select.config.choose = G.P_CENTERS.p_stocking_present_select.config.choose - 1
-    end,
+    pos = { x = 5, y = 0 }
 })
 
 -- IMPROVISED PAINTER
@@ -289,7 +293,8 @@ StockingStuffer.Present({
     loc_vars = function(self, info_queue, card)
 		local hpt = card.ability.extra
 		local vars = {
-            hpt.list_of_enhancements[#hpt.list_of_enhancements] or localize("k_none")
+            hpt.list_of_enhancements[#hpt.list_of_enhancements] and G.P_CENTERS[hpt.list_of_enhancements[#hpt.list_of_enhancements]].label or localize("k_none"),
+            #hpt.list_of_enhancements
 		}            
         return {key = "[REDACTED]Autumn_stocking_improvised_painter_"..hpt.state, vars = vars }
     end,
@@ -300,6 +305,8 @@ StockingStuffer.Present({
             if StockingStuffer.first_calculation and context.individual and context.cardarea == G.play and not context.end_of_round then
                 local carde = context.other_card
                 if carde.config.center.key == "c_base" and next(hpt.list_of_enhancements) then
+                    local ind = hpt.list_of_enhancements[#hpt.list_of_enhancements]
+                    hpt.list_of_enhancements[#hpt.list_of_enhancements] = nil
                     G.E_MANAGER:add_event(Event({
                         trigger = 'immediate',
                         func = function()  
@@ -313,7 +320,7 @@ StockingStuffer.Present({
                     G.E_MANAGER:add_event(Event({
                        trigger = 'immediate',
                         func = function()  
-                            carde:set_ability(hpt.list_of_enhancements[#hpt.list_of_enhancements])
+                            carde:set_ability(ind)
                             return true
                         end
                     }))
@@ -329,7 +336,6 @@ StockingStuffer.Present({
                             return true
                         end
                     }))
-                    hpt.list_of_enhancements[#hpt.list_of_enhancements] = nil
                 end
             end
         else

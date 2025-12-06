@@ -27,9 +27,10 @@ return {
                     "from scored enhanced",
                     "cards and {C:attention}store{} it in",
                     "this Joker",
-                    "{C:inactive}(Latest Enhancement: #1#)",
+                    "{C:inactive,s:0.8}(Latest Enhancement: #1#)",
+                    "{C:inactive,s:0.8}(Amount of stored Enhancments: #2#)",
                     '{stocking}after{}',},
-                    {'Switch to the Paintbrush',
+                    {'Switch to the {C:attention}Paintbrush',
                     '{stocking}usable{}',}
                 }
             },
@@ -41,9 +42,10 @@ return {
                     "cards with the",
                     "{C:attention}enhancements stored{} in",
                     "this Joker",
-                    "{C:inactive}(Latest Enhancement: #1#)",
+                    "{C:inactive,s:0.8}(Latest Enhancement: #1#)",
+                    "{C:inactive,s:0.8}(Amount of stored Enhancments: #2#)",
                     '{stocking}before{}',},
-                    {'Switch to White-Out',
+                    {'Switch to {C:attention}White-Out',
                     '{stocking}usable{}',}
                 }
             },
