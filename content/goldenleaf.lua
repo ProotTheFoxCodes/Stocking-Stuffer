@@ -1,3 +1,4 @@
+StockingStuffer.GlVars = {}
 
 loc_colour()
 G.ARGS.LOC_COLOURS.gl_pink = HEX("e462d3")
@@ -15,6 +16,13 @@ SMODS.Atlas({
     path = 'present_gl.png',
     px = 71,
     py = 95
+})
+
+SMODS.Atlas({
+    key = 'gl_ditto_mist',
+    path = 'gl_ditto_mist.png',
+    px = 80,
+    py = 80
 })
 
 StockingStuffer.Developer({
@@ -145,7 +153,6 @@ StockingStuffer.Present({
 
 -- DITTO
 
-StockingStuffer.GlVars = {}
 local ss_calc_ref = SMODS.current_mod.calculate or function() return end
 SMODS.current_mod.calculate = function (self, context)
     local ret = ss_calc_ref(self, context)
@@ -159,7 +166,24 @@ SMODS.current_mod.calculate = function (self, context)
     end
     return ret
 end
-
+SMODS.DrawStep(
+    {
+    key = 'ditto',
+    order = -25,
+    func = function(card, layer)
+        if card.ditto or card.config.center.key == "[REDACTED]Autumn_stocking_ditto" then
+            local _xOffset = (71 - 80)/2/30
+            local _yOffset = (95 - 80)/2/30
+            local scale_mod = 0.02 * math.sin(1.8*G.TIMERS.REAL)
+            local rotate_mod = 0
+            StockingStuffer.GlVars.ditto_sprite = StockingStuffer.GlVars.ditto_sprite or Sprite(card.T.x + 0, card.T.y + 0, 80, 80, G.ASSET_ATLAS["stocking_gl_ditto_mist"], {x = 0, y = 0})
+            StockingStuffer.GlVars.ditto_sprite.role.draw_major = card
+            StockingStuffer.GlVars.ditto_sprite:draw_shader('dissolve',0, nil, nil, card.children.center,scale_mod, rotate_mod, _xOffset, 0.1 + 0.03 + _yOffset,nil, 0.6)
+            StockingStuffer.GlVars.ditto_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, scale_mod, rotate_mod, _xOffset, _yOffset)
+        end
+    end,
+    }
+)
 local gcu = generate_card_ui
 function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card) 
     local ret = gcu(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
