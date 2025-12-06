@@ -414,7 +414,7 @@ local tungsten_faces = {
     60, 25, 28,
 }
 
-local function draw_3d_tri (v1, v2, v3, x, y, rx, ry, scale)
+local function draw_3d_tri (v1, v2, v3, x, y, rx, ry, scale, force_darken)
     -- rotate around y axis
     local v1 = {v1[1], v1[2], v1[3]}
     local v2 = {v2[1], v2[2], v2[3]}
@@ -460,9 +460,12 @@ local function draw_3d_tri (v1, v2, v3, x, y, rx, ry, scale)
     local v2 = { v2[1] * scale + x, v2[2] * scale + y }
     local v3 = { v3[1] * scale + x, v3[2] * scale + y }
 
-    local brightness = 0.6 + normal_y / 7 + normal_x / 15
+    local brightness = 0.6 + normal_y / 5 + normal_x / 11
 
-    love.graphics.setColor(brightness,brightness,brightness * 1.05)
+    love.graphics.setColor(brightness * 0.99,brightness * 0.98,brightness * 1.08)
+    if force_darken then
+        love.graphics.setColor(0.05, 0.05, 0.15)
+    end
     love.graphics.polygon("fill", v1[1], v1[2], v2[1], v2[2], v3[1], v3[2])
 end
 
@@ -497,6 +500,23 @@ StockingStuffer.Present({
             y_tilt = card.ability.extra.old_y_tilt
 
             local juice_scale = 1 + ((card.juice or {scale = 0}).scale or 0) * 3
+            
+            for i = 1, #tungsten_faces/3 do
+                local i = i * 3 - 2
+                draw_3d_tri(
+                    tungsten_verts[tungsten_faces[i + 0]],
+                    tungsten_verts[tungsten_faces[i + 1]],
+                    tungsten_verts[tungsten_faces[i + 2]],
+                    x_pos,
+                    y_pos,
+                    -- tungsten_dt * 0.0724874 + y_tilt,
+                    -- tungsten_dt * 0.1689412 + x_tilt,
+                    y_tilt,
+                    x_tilt,
+                    size * juice_scale * 1.05,
+                    true
+                )
+            end
 
             for i = 1, #tungsten_faces/3 do
                 local i = i * 3 - 2
@@ -510,7 +530,8 @@ StockingStuffer.Present({
                     -- tungsten_dt * 0.1689412 + x_tilt,
                     y_tilt,
                     x_tilt,
-                    size * juice_scale
+                    size * juice_scale,
+                    false
                 )
             end
         end
