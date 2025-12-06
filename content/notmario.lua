@@ -422,16 +422,16 @@ local function draw_3d_tri (v1, v2, v3, x, y, rx, ry, scale)
 
     for _, n in pairs({v1,v2,v3}) do
         local m = {n[1],n[2],n[3]}
-        n[1] = m[1]
-        n[2] = m[2] * math.cos(rx) - m[3] * math.sin(rx)
-        n[3] = m[2] * math.sin(rx) + m[3] * math.cos(rx)
+        n[1] = m[1] * math.cos(ry) - m[3] * math.sin(ry)
+        n[2] = m[2]
+        n[3] = m[1] * math.sin(ry) + m[3] * math.cos(ry)
     end
 
     for _, n in pairs({v1,v2,v3}) do
         local m = {n[1],n[2],n[3]}
-        n[1] = m[1] * math.cos(ry) - m[3] * math.sin(ry)
-        n[2] = m[2]
-        n[3] = m[1] * math.sin(ry) + m[3] * math.cos(ry)
+        n[1] = m[1]
+        n[2] = m[2] * math.cos(rx) - m[3] * math.sin(rx)
+        n[3] = m[2] * math.sin(rx) + m[3] * math.cos(rx)
     end
 
     -- calc normal
@@ -466,13 +466,6 @@ local function draw_3d_tri (v1, v2, v3, x, y, rx, ry, scale)
     love.graphics.polygon("fill", v1[1], v1[2], v2[1], v2[2], v3[1], v3[2])
 end
 
-local tungsten_dt = 0
-local lu = love.update
-function love.update(dt)
-    lu(dt)
-    tungsten_dt = tungsten_dt + dt
-end
-
 StockingStuffer.Present({
     developer = display_name,
 
@@ -481,7 +474,7 @@ StockingStuffer.Present({
 
     pos = { x = 99, y = 99 },
     pixel_size = { w = 85, h = 85 },
-    config = { extra = { pack_limit = 1, present_limit = 4 } },
+    config = { extra = { pack_limit = 1, present_limit = 4, old_x_tilt = 0, old_y_tilt = 0, } },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.pack_limit, card.ability.extra.present_limit, colours = { HEX("22A617") } } }
     end,
@@ -490,17 +483,34 @@ StockingStuffer.Present({
             local scale = G.TILESCALE*G.TILESIZE*G.CANV_SCALE
             local size_scale = 85 / 71
             local size = G.TILESCALE*G.TILESIZE * size_scale
+
+            local x_pos = card.children.center.VT.x * scale + scale * size_scale
+            local y_pos = card.children.center.VT.y * scale + scale * size_scale
+
+            local x_tilt = (card.tilt_var.mx - x_pos) / 300
+            local y_tilt = (card.tilt_var.my - y_pos) / 300
+
+            card.ability.extra.old_x_tilt = (card.ability.extra.old_x_tilt * 3 + x_tilt) / 4
+            card.ability.extra.old_y_tilt = (card.ability.extra.old_y_tilt * 3 + y_tilt) / 4
+
+            x_tilt = card.ability.extra.old_x_tilt
+            y_tilt = card.ability.extra.old_y_tilt
+
+            local juice_scale = 1 + ((card.juice or {scale = 0}).scale or 0) * 3
+
             for i = 1, #tungsten_faces/3 do
                 local i = i * 3 - 2
                 draw_3d_tri(
                     tungsten_verts[tungsten_faces[i + 0]],
                     tungsten_verts[tungsten_faces[i + 1]],
                     tungsten_verts[tungsten_faces[i + 2]],
-                    card.children.center.VT.x * scale + scale * size_scale,
-                    card.children.center.VT.y * scale + scale * size_scale,
-                    tungsten_dt * 0.1724874,
-                    tungsten_dt * 0.68894,
-                    size
+                    x_pos,
+                    y_pos,
+                    -- tungsten_dt * 0.0724874 + y_tilt,
+                    -- tungsten_dt * 0.1689412 + x_tilt,
+                    y_tilt,
+                    x_tilt,
+                    size * juice_scale
                 )
             end
         end
