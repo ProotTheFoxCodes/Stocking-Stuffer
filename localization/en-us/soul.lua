@@ -33,6 +33,10 @@ return {
             ["Spectral Pack_stocking_knife"] = {
                 name = "Actor's Knife",
                 text = {}
+            },
+            ["Spectral Pack_stocking_crown"] = {
+                name = "Fool's Crown",
+                text = {}
             }
         }
     }
