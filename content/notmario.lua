@@ -249,12 +249,13 @@ local wrapped_models = {{
 StockingStuffer.WrappedPresent({
     developer = display_name,
 
-    pos = { x = 99, y = 99 },
+    pos = { x = 0, y = 1 },
     pixel_size = { w = 85, h = 85 },
 
     config = { extra = { old_x_tilt = 0, old_y_tilt = 0, } },
     draw = function(self, card, layer)
-        if card.config.center.discovered or card.bypass_discovery_center then
+        card.children.center:set_sprite_pos({x = 0, y = StockingStuffer.disable_animations and 1 or 99})
+        if (card.config.center.discovered or card.bypass_discovery_center) and not StockingStuffer.disable_animations then
             draw_3d_model(card, 71, wrapped_verts, wrapped_cols, wrapped_models)
         end
     end,
@@ -664,14 +665,15 @@ StockingStuffer.Present({
     key = 'tungsten_rhombicosidodecahedron',
     atlas = display_name..'_presents',
 
-    pos = { x = 99, y = 99 },
+    pos = { x = 2, y = 1 },
     pixel_size = { w = 85, h = 85 },
     config = { extra = { pack_limit = 1, present_limit = 4, old_x_tilt = 0, old_y_tilt = 0, } },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.pack_limit, card.ability.extra.present_limit, colours = { HEX("22A617") } } }
     end,
     draw = function(self, card, layer)
-        if card.config.center.discovered or card.bypass_discovery_center then
+        card.children.center:set_sprite_pos({x = 2, y = StockingStuffer.disable_animations and 1 or 99})
+        if (card.config.center.discovered or card.bypass_discovery_center) and not StockingStuffer.disable_animations then
             draw_3d_model(card, 85, tungsten_verts, tungsten_cols, tungsten_models)
         end
     end,
