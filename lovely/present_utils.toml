@@ -382,3 +382,46 @@ for _, area in ipairs(SMODS.get_card_areas('jokers')) do
     end
     table.insert(checked, area)
 '''
+
+# Make calc_dollar_bonus only trigger once
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+for _, area in ipairs(SMODS.get_card_areas('jokers')) do
+'''
+payload = '''
+local StockingStuffer_calculated = {}
+'''
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+for i = 1, #G.GAME.tags do
+'''
+payload = '''
+for _, _c in ipairs(StockingStuffer_calculated) do
+    _c.calc_dollar_done = nil
+end
+'''
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+-- TARGET: calc_dollar_bonus per card
+if ret then
+'''
+payload = '''
+-- TARGET: calc_dollar_bonus per card
+if ret and not _card.calc_dollar_done then
+    if area == G.stocking_present then
+        _card.calc_dollar_done = true
+        table.insert(StockingStuffer_calculated, _card)
+    end
+'''

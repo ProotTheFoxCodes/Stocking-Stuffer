@@ -538,6 +538,7 @@ function Game.update_shop(self, dt)
         func = function()
             if G.STATE_COMPLETE and not G.OVERLAY_MENU then
                 local card = SMODS.add_card({area = G.play, key = 'p_stocking_present_select', skip_materialize = true})
+                card.cost = 0
                 G.FUNCS.use_card({ config = { ref_table = card } })
                 ease_value(G.HUD.alignment.offset, 'x', -7, nil, nil, nil, 1, 'elastic')
                 ease_value(G.christmas_tree.alignment.offset, 'x', 12, nil, nil, nil, 1, 'elastic')
