@@ -1,3 +1,17 @@
+local loc_old = loc_colour
+function loc_colour(_c, _default)
+    if not G.ARGS.LOC_COLOURS then
+        loc_old()
+    end
+    G.ARGS.LOC_COLOURS.stocking_athebyne_winter = HEX('14B8FF')
+    G.ARGS.LOC_COLOURS.stocking_athebyne_spring = HEX('0CAE42')
+    G.ARGS.LOC_COLOURS.stocking_athebyne_summer = HEX('FF0D24')
+    G.ARGS.LOC_COLOURS.stocking_athebyne_autumn = HEX('FF7106')
+    return loc_old(_c, _default)
+end
+
+
+
 local display_name = 'athebyne'
 SMODS.Atlas({
     key = display_name..'_presents',
@@ -9,7 +23,6 @@ SMODS.Atlas({
 
 StockingStuffer.Developer({
     name = display_name,
-
     colour = HEX('4E1C29')
 })
 
@@ -35,7 +48,7 @@ Jolly Ranchers
 The Jolly Roger
 ]]--
 
---Swap effects of Runic Tablet and Jolly Green Giant?
+--Need to Jolly-ify runic tablet and Pendant
 
 StockingStuffer.Present({
     developer = display_name,
@@ -45,7 +58,8 @@ StockingStuffer.Present({
          name = 'Jolly Roger',
          text = {
              {'Reroll all cards held in hand',
-             'when a Card is sold'},
+             'when a card is {C:attention}sold{}',
+             '{stocking}before{}'},
              {'{C:inactive}You wouldn\'t download a car!'}
          }
      },
@@ -142,9 +156,10 @@ StockingStuffer.Present({
     loc_txt = {
         name = 'Runic Tablet',
         text = {
-            {'When a playing card is destroyed',
+            {'When a playing card is {C:attention}destroyed{},',
             'also destroy all other cards with',
-            'the same Rank and Suit as it',},
+            'the {C:attention}same Rank and Suit{} as it',
+            '{stocking}after{}'},
             {'{C:inactive}TO THE ONE WHO TOILS FOR NAUGHT',
             '{C:inactive}THOU ART JOLLY',
             '{C:inactive}THOU ART JOLLY',
@@ -187,16 +202,17 @@ StockingStuffer.Present({
     end
 })
 
+--Needs to be Jolly
 StockingStuffer.Present({
     developer = display_name, -- DO NOT CHANGE
 
     key = 'pendant_winter',
     loc_txt = {
-        name = 'Pendant of Winds',
+        name = 'Pendant of {C:stocking_athebyne_winter}Winds{}',
         text = {
             {'Effect changes when Blind is selected',
-            '{C:inactive}(Currently attuned to Boreas)'},
-            {'Earn $1 at end of the round per 4 cards remaining in the deck'}
+            '{C:inactive}(Currently attuned to {}{C:stocking_athebyne_winter}Boreas{}{C:inactive})'},
+            {'Earn {C:money}$1{} at end of the round for every {C:attention}4{} cards remaining in the deck'}
         }
     },
     pos = { x = 3, y = 0 },
@@ -255,7 +271,7 @@ StockingStuffer.Present({
             })
             return {
                 message = localize('athebyne_effect_cycle'),
-                colour = G.C.FILTER
+                colour = HEX('0CAE42')
             }
         end
         if context.joker_main then
@@ -271,15 +287,17 @@ StockingStuffer.Present({
 
     key = 'pendant_spring',
     loc_txt = {
-        name = 'Pendant of Winds',
+        name = 'Pendant of {C:stocking_athebyne_spring}Winds{}',
         text = {
             {'Effect changes when Blind is selected',
-            '{C:inactive}(Currently attuned to Zephyrus)'},
-            {'Scored cards give their {C:chips}+Chips{} as {C:mult}+Mult{} as well'}
+            '{C:inactive}(Currently attuned to {}{C:stocking_athebyne_spring}Zephyrus{}{C:inactive})'},
+            {'Scored cards give their {C:chips}+Chips{} as {C:mult}+Mult{} as well',
+            '{stocking}before{}'}
         }
     },
     pos = { x = 3, y = 1 },
     no_collection = true,
+    in_pool = false,
     calculate = function(self, card, context)
         -- check context and return appropriate values
         -- StockingStuffer.first_calculation is true before jokers are calculated
@@ -334,13 +352,16 @@ StockingStuffer.Present({
             })
             return {
                 message = localize('athebyne_effect_cycle'),
-                colour = G.C.FILTER
+                colour = HEX('FF0D24')
             }
         end
-        if context.joker_main then
-            return {
-                message = 'example'
-            }
+        if context.individual and StockingStuffer.first_calculation then
+            if context.cardarea == G.play then
+                return {
+                    mult = context.other_card:get_chip_bonus(),
+                    card = card
+                }
+            end
         end
     end
 })
@@ -350,15 +371,17 @@ StockingStuffer.Present({
 
     key = 'pendant_summer',
     loc_txt = {
-        name = 'Pendant of Winds',
+        name = 'Pendant of {C:stocking_athebyne_summer}Winds{}',
         text = {
             {'Effect changes when Blind is selected',
-            '{C:inactive}(Currently attuned to Notus)'},
-            {'The last scoring card of each hand becomes a random Enhancement'}
+            '{C:inactive}(Currently attuned to {}{C:stocking_athebyne_summer}Notus{}{C:inactive})'},
+            {'The {C:attention}rightmost scoring card{} of each hand becomes a random {C:attention}Enhancement{}',
+             '{stocking}after{}'}
         }
     },
     pos = { x = 3, y = 2 },
     no_collection = true,
+    in_pool = false,
     calculate = function(self, card, context)
         -- check context and return appropriate values
         -- StockingStuffer.first_calculation is true before jokers are calculated
@@ -413,12 +436,20 @@ StockingStuffer.Present({
             })
             return {
                 message = localize('athebyne_effect_cycle'),
-                colour = G.C.FILTER
+                colour = HEX('FF7106')
             }
         end
-        if context.joker_main then
+        if context.before and StockingStuffer.second_calculation then
+            G.E_MANAGER:add_event(Event{
+                func = function()
+                    context.scoring_hand[#context.scoring_hand]:set_ability(G.P_CENTERS[SMODS.poll_enhancement({guaranteed = true, key = "ath_summer_pendant"})])
+                    context.scoring_hand[#context.scoring_hand]:juice_up()
+                    return true
+                end
+            })
             return {
-                message = 'example'
+                message = 'Enhanced!',
+                card = card
             }
         end
     end
@@ -429,15 +460,16 @@ StockingStuffer.Present({
 
     key = 'pendant_fall',
     loc_txt = {
-        name = 'Pendant of Winds',
+        name = 'Pendant of {C:stocking_athebyne_autumn}Winds{}',
         text = {
             {'Effect changes when Blind is selected',
-            '{C:inactive}(Currently attuned to Eurus)'},
-            {'Gain a Discard when hand is played'}
+            '{C:inactive}(Currently attuned to {}{C:stocking_athebyne_autumn}Eurus{}{C:inactive})'},
+            {'Gain {C:red}+1{} discard when {C:blue}hand{} is played'}
         }
     },
     pos = { x = 3, y = 3 },
     no_collection = true,
+    in_pool = false,
     calculate = function(self, card, context)
         if not context.blueprint and context.setting_blind and StockingStuffer.first_calculation then
             G.E_MANAGER:add_event(Event {
@@ -489,7 +521,7 @@ StockingStuffer.Present({
             })
             return {
                 message = localize('athebyne_effect_cycle'),
-                colour = G.C.FILTER
+                colour = HEX('14B8FF')
             }
         end
         if context.joker_main then
