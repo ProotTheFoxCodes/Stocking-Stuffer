@@ -277,6 +277,16 @@ StockingStuffer.Present({
     end,
     use = function(self, card)
         card.ability.extra.active = not card.ability.extra.active
+        delay(0.5)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                update_hand_text({immediate = true, nopulse = true, delay = 0}, {mult = 0, chips = 0, level = '', handname = ''})
+                G.hand:unhighlight_all()
+                return true
+            end
+        }))
     end,
     loc_vars = function(self, info_queue, card)
         return {key = card.ability.extra.active and 'notmario_stocking_plushie' or 'notmario_stocking_plushie_off'}
