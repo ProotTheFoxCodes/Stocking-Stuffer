@@ -246,6 +246,8 @@ local wrapped_models = {{
     33, 39, 40,
 }}
 
+local models_toggle_with_reduced_motion = false
+
 StockingStuffer.WrappedPresent({
     developer = display_name,
 
@@ -254,8 +256,8 @@ StockingStuffer.WrappedPresent({
 
     config = { extra = { old_x_tilt = 0, old_y_tilt = 0, } },
     draw = function(self, card, layer)
-        card.children.center:set_sprite_pos({x = 0, y = StockingStuffer.disable_animations and 1 or 99})
-        if (card.config.center.discovered or card.bypass_discovery_center) and not StockingStuffer.disable_animations then
+        card.children.center:set_sprite_pos({x = 0, y = (StockingStuffer.disable_animations and models_toggle_with_reduced_motion) and 1 or 99})
+        if (card.config.center.discovered or card.bypass_discovery_center) and not (StockingStuffer.disable_animations and models_toggle_with_reduced_motion) then
             draw_3d_model(card, 71, wrapped_verts, wrapped_cols, wrapped_models)
         end
     end,
@@ -693,8 +695,8 @@ StockingStuffer.Present({
         return { vars = { card.ability.extra.pack_limit, card.ability.extra.present_limit, colours = { HEX("22A617") } } }
     end,
     draw = function(self, card, layer)
-        card.children.center:set_sprite_pos({x = 2, y = StockingStuffer.disable_animations and 1 or 99})
-        if (card.config.center.discovered or card.bypass_discovery_center) and not StockingStuffer.disable_animations then
+        card.children.center:set_sprite_pos({x = 2, y = (StockingStuffer.disable_animations and models_toggle_with_reduced_motion) and 1 or 99})
+        if (card.config.center.discovered or card.bypass_discovery_center) and not (StockingStuffer.disable_animations and models_toggle_with_reduced_motion) then
             draw_3d_model(card, 85, tungsten_verts, tungsten_cols, tungsten_models)
         end
     end,
