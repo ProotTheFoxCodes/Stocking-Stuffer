@@ -21,7 +21,6 @@ StockingStuffer.Developer({
 StockingStuffer.WrappedPresent({
     developer = display_name, -- DO NOT CHANGE
     artist = {"just_smolchild"},
-    key = display_name.."_stocking_present",
     pos = { x = 0, y = 0 },
 })
 
@@ -316,7 +315,7 @@ StockingStuffer.Present({ --mysterious object (the wand, upside down)
         end
     end,
     calc_dollar_bonus = function (self, card)
-        if card.ability.extra.type == "admire" and StockingStuffer.first_calculation then
+        if card.ability.extra.type == "admire" then
             return card.ability.admire.dollars
         end
     end
