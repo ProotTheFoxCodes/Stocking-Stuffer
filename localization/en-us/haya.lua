@@ -35,11 +35,14 @@ return {
 					"the {C:green}Christmas Tree{}",
 					"{C:inactive}(Once per ante)",
 					"{C:inactive,s:0.8}A reminder of the past",
+					"{stocking}usable{}"
 				}
 			},
 			haya_stocking_ssr_revival_skill = {
 				name = {
-					"{C:dark_edition}[RETURNER'S WINDING CLOCK]",
+					-- The Time Traveler's Clock is the translation used in the manhwa
+					-- But idk returner's winding clock sounds cooler
+					"{C:dark_edition}Returner's Winding Clock",
 					"{s:0.6}Rank: {C:edition,s:0.6}EX{}"
 				},
 				text = {
@@ -59,7 +62,8 @@ return {
 				text = {
 					"Every {C:attention}#1#th{} played card",
 					"has a {C:dark_edition,E:1}random effect{}",
-					"{C:inactive}(#2#/#1# cards)"
+					"{C:inactive}(#2#/#1# cards)",
+					"{stocking}before{}"
 				}
 			}
 		}

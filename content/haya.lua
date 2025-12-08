@@ -35,6 +35,14 @@ StockingStuffer.Developer({
 	colour = lighten(HEX('515aa8'), 0.3)
 })
 
+-- Just in case if Aiko's name is not yet loaded...
+if not StockingStuffer.aikoyori then
+	StockingStuffer.Developer({
+	    name = 'Aikoyori', -- DO NOT CHANGE
+	    colour = HEX('5ebb55')
+	})
+end
+
 -- Wrapped Present Template
 -- key defaults to 'display_name_stocking_present'
 StockingStuffer.WrappedPresent({
@@ -64,6 +72,7 @@ StockingStuffer.Present({
 	pos = { x = 1, y = 0 },
 	pixel_size = { w = 56, h = 74 },
 	config = { extra = { disabled = false } },
+	artist = {'Aikoyori'},
 	disable_use_animation = true, -- We manually move the various things ourselves so disable thissss
 	can_use = function(self, card)
 		return G.jokers and G.jokers.highlighted and #G.jokers.highlighted == 1 and G.STATE ~= G.STATES.SELECTING_HAND and
@@ -161,17 +170,11 @@ StockingStuffer.Present({
 })
 
 G.FUNCS.draw_from_discard_to_deck_no_event = function(card_count)
-    --G.E_MANAGER:add_event(Event({
-    --    trigger = 'immediate',
-    --    func = function()
-            local discard_count = card_count
-            for i=1, discard_count do --draw cards from deck
-                draw_card(G.discard, G.deck, i*100/discard_count,'up', nil ,nil, 0.005, i%2==0, nil, math.max((21-i)/20,0.7))
-            end
-    --        return true
-    --    end
-    --  }))
-  end
+    local discard_count = card_count
+    for i=1, discard_count do --draw cards from deck
+        draw_card(G.discard, G.deck, i*100/discard_count,'up', nil ,nil, 0.005, i%2==0, nil, math.max((21-i)/20,0.7))
+    end
+end
 
 local function ssr_revive(card)
 	if (StockingStuffer.states.slot_visible == 1) then
@@ -179,13 +182,9 @@ local function ssr_revive(card)
 		delay(0.7)
 	end
 	G.CONTROLLER.locked = true
-	--G.E_MANAGER:add_event(Event{
-	--	func = function()
-			G.FUNCS.draw_from_hand_to_discard()
-			G.FUNCS.draw_from_discard_to_deck_no_event(#G.playing_cards)
-	--		return true
-	--end
-	--})
+
+	G.FUNCS.draw_from_hand_to_discard()
+	G.FUNCS.draw_from_discard_to_deck_no_event(#G.playing_cards)
 
 	G.STATE = G.STATES.ROUND_EVAL
 
@@ -207,7 +206,8 @@ local function ssr_revive(card)
 					trigger = 'after',
 					delay = 0.5 * G.SETTINGS.GAMESPEED,
 					func = function()
-
+						-- Annoyingly, the queue bloats for some reason sometimes
+						-- VERY bad hack, do something with this!!!!
 						G.E_MANAGER:clear_queue("base")
 						if (StockingStuffer.states.slot_visible == -1) then
 							G.FUNCS.toggle_jokers_presents()
@@ -215,6 +215,8 @@ local function ssr_revive(card)
 						end
 
 						G.E_MANAGER:add_event(Event {
+							trigger = 'after',
+							delay = 0.2,
 							func = function()
 								for k, v in ipairs(G.jokers.cards) do
 									if G.GAME.haya_stocking_stuffer.jokers_added[v.sort_id] then
@@ -296,6 +298,7 @@ StockingStuffer.Present({
 	pixel_size = { w = 38, h = 48 },
 	display_size = { w = 38 * 1.25, h = 48 * 1.25 },
 	config = { extra = { ante = 1 } },
+	artist = {'Aikoyori'},
 	loc_vars = function(self, info_queue, card)
 		return {
 			vars = { card.ability.extra.ante }
@@ -380,6 +383,7 @@ StockingStuffer.Present({
 	pos = { x = 3, y = 0 },
 	pixel_size = { w = 71, h = 84 },
 	config = { extra = { count = 7, remaining = 0, remove = false } },
+	artist = {'Aikoyori'},
 	loc_vars = function(self, info_queue, card)
 		return {
 			vars = { card.ability.extra.count, card.ability.extra.remaining }
@@ -461,6 +465,7 @@ StockingStuffer.Present({
 							sound = "stocking_haya_snap_revolver_flame",
 							pitch = 1
 						}
+						v.ability.haya_destroy = true
 						r = r.extra
 					end
 					card.ability.extra.remove = true
@@ -476,15 +481,10 @@ StockingStuffer.Present({
 				}
 			end
 		end
-		if context.after and card.ability.extra.remove then
-			G.E_MANAGER:add_event(Event {
-				func = function()
-					SMODS.destroy_cards(G.play.cards)
-					return true
-				end
-			})
-			SMODS.calculate_context({ remove_playing_cards = true, removed = G.play.cards })
-			card.ability.extra.remove = false
+		if context.destroying_card and context.destroying_card.ability.haya_destroy then
+			return {
+				remove = true
+			}
 		end
 	end
 })
