@@ -7,7 +7,6 @@ return {
                     'Use this to create a {C:attention}random{},',
                     '{C:attention}very specific{} pair of Jokers',
                     '{C:inactive}(must require room){}',
-                    '{C:inactive,s:0.7}(art by: pangaea47){}'
                 }
             },
             Rainstar_stocking_can_of_chips = {
@@ -15,7 +14,6 @@ return {
                 text = {
                     'Scored playing cards give {C:chips}+#1#{} extra Chips',
                     'Loses {C:chips}#2#{} Chips after scoring ends',
-                    '{C:inactive,s:0.7}(art by: pangaea47){}'
                 }
             },
             Rainstar_stocking_enchanted_coal = {
@@ -26,7 +24,6 @@ return {
                     '{C:inactive}(Can be used once per ante){}',
                     '{C:inactive}Active: {C:attention}#1#{}',
                     '{C:inactive}Usable: {C:attention}#2#{}',
-                    '{C:inactive,s:0.7}(art by: pangaea47){}'
                 }
             }
         },
