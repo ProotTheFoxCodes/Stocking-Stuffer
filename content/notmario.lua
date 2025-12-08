@@ -269,6 +269,8 @@ StockingStuffer.Present({
     config = { extra = { active = true } },
     pos = { x = 1, y = 0 },
     pixel_size = { w = 54, h = 61 },
+    artist = { "pangaea47" },
+    blueprint_compat = false,
     can_use = function(self, card)
         -- check for use condition here
         return true
@@ -318,6 +320,8 @@ StockingStuffer.Present({
     config = { extra = 5 },
     pixel_size = { w = 64, h = 24 },
     display_size = { w = 64 * 1.25, h = 24 * 1.25 },
+    artist = { "pangaea47" },
+    blueprint_compat = true,
 
     loc_vars = function(self, info_queue, card)
         return {
@@ -347,6 +351,8 @@ StockingStuffer.Present({
     config = { extra = { antes_left = 4 } },
     pos = { x = 3, y = 0 },
     pixel_size = { w = 57, h = 81 },
+    artist = { "pangaea47" },
+    blueprint_compat = false,
 
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS["notmario_stocking_diamond"]
@@ -383,6 +389,8 @@ StockingStuffer.Present({
     config = { extra = { mult = 1 } },
     pos = { x = 4, y = 0 },
     pixel_size = { w = 61, h = 52 },
+    artist = { "pangaea47" },
+    blueprint_compat = true,
 
     no_collection = true,
     yes_pool_flag = "really_long_flag_for_the_diamond_present", -- surely nobody sets this to be true
@@ -454,6 +462,8 @@ StockingStuffer.Present({
     config = { extra = { times_used = 0 } },
     pixel_size = { w = 22, h = 46 },
     display_size = { w = 22 * 1.5, h = 46 * 1.5 },
+    artist = { "pangaea47" },
+    blueprint_compat = false,
     can_use = function(self, card)
         -- check for use condition here
         return G.STATE == G.STATES.SELECTING_HAND and G.GAME.blind.boss
@@ -668,6 +678,7 @@ StockingStuffer.Present({
     pos = { x = 2, y = 1 },
     pixel_size = { w = 85, h = 85 },
     config = { extra = { pack_limit = 1, present_limit = 4, old_x_tilt = 0, old_y_tilt = 0, } },
+    blueprint_compat = false,
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.pack_limit, card.ability.extra.present_limit, colours = { HEX("22A617") } } }
     end,
