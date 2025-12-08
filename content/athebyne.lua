@@ -168,11 +168,14 @@ StockingStuffer.Present({
         }
     },
     pos = { x = 2, y = 0 },
-
+    config = {
+        extra = {
+            destroyed = false
+        }
+    },
     calculate = function(self, card, context)
-        local destroyed = false
-        if context.remove_playing_cards and not context.blueprint and StockingStuffer.second_calculation and not destroyed then
-            destroyed = true
+        if context.remove_playing_cards and not context.blueprint and StockingStuffer.second_calculation and not card.ability.extra.destroyed then
+            card.ability.extra.destroyed = true
             local cards_to_destroy = {}
             for _,playingcard in ipairs(G.playing_cards) do
                 if SMODS.has_no_suit(playingcard) or SMODS.has_no_rank(playingcard) then
@@ -189,10 +192,13 @@ StockingStuffer.Present({
                     end
                 end
             end
-            --SMODS.destroy_cards(cards_to_destroy)
-            for _,_card in ipairs(cards_to_destroy) do
-                _card:start_dissolve()
-            end
+            SMODS.destroy_cards(cards_to_destroy)
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    card.ability.extra.destroyed = false
+                    return true
+                end
+            }))
         end
     end
 })
@@ -207,7 +213,8 @@ StockingStuffer.Present({
         text = {
             {'Effect changes when Blind is selected',
             '{C:inactive}(Currently attuned to {}{C:stocking_athebyne_winter}Boreas{}{C:inactive})'},
-            {'Earn {C:money}$1{} at end of the round for every {C:attention}4{} cards remaining in the deck'}
+            {'Earn {C:money}$1{} at end of the round for every {C:attention}4{} cards remaining in the deck',
+             '{stocking}after{}'}
         }
     },
     pos = { x = 3, y = 0 },
@@ -542,19 +549,42 @@ StockingStuffer.Present({
     loc_txt = {
         name = 'Jolly Ranchers',
         text = {
-            'Using a Tarot card has a fixed 25% chance of creating the next tarot card in sequence',
+            'Using a {C:purple}Tarot{} card has a {C:green}fixed 25% chance{} of creating the next {C:purple}Tarot{} card in sequence',
             '{C:inactive}(Must have room)'
         }
     },
     pos = { x = 4, y = 0 },
 
     calculate = function(self, card, context)
-        -- check context and return appropriate values
-        -- StockingStuffer.first_calculation is true before jokers are calculated
-        -- StockingStuffer.second_calculation is true after jokers are calculated
-        if context.joker_main then
+        if context.using_consumeable and context.consumeable.ability.set == 'Tarot' and G.consumeables.config.card_limit > #G.consumeables.cards and StockingStuffer.second_calculation then
+            if pseudorandom("ranchers") > 0.25 then
+                return {
+                    message = localize('k_nope_ex'),
+                    colour = G.C.SECONDARY_SET.Tarot
+                }
+            end
+            tarotOrder = {}
+            --TODO: Respect in_pool. except allow it to duplicate held cards. ok so maybe dont respect in_pool?
+            --eh who cares this only matters for crossmod and we explicitly aren't doing crossmod.
+            for i, v in ipairs(G.P_CENTER_POOLS.Tarot) do
+                tarotOrder[v.key] = i
+            end
+            local newTarot = tarotOrder[context.consumeable.config.center.key] + 1
+            if newTarot > #G.P_CENTER_POOLS.Tarot then newTarot = 1 end
+            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+            G.E_MANAGER:add_event(Event({
+                func = (function()
+                    SMODS.add_card {
+                        set = 'Tarot',
+                        key = G.P_CENTER_POOLS.Tarot[newTarot].key,
+                    }
+                    G.GAME.consumeable_buffer = 0
+                    return true
+                end)
+            }))
             return {
-                message = 'example'
+                message = localize('k_plus_tarot'),
+                colour = G.C.SECONDARY_SET.Tarot
             }
         end
     end
