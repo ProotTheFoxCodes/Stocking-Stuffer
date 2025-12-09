@@ -80,7 +80,7 @@ return {
                 text = {
                     {
                         "{C:green}#1# in #2#{} chance of gaining",
-                        "{X:red,C:white}#3#XFestiveCheer{} when hand is played",
+                        "{B:stocking_xCheerBack,V:stocking_xCheerFront}#3#XFestiveCheer{} when hand is played",
                         "{stocking}before{}"
                     },
                     {
