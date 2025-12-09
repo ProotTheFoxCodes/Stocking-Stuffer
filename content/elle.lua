@@ -210,25 +210,19 @@ StockingStuffer.Present({
 
     key = 'bootleg',
     pos = { x = 5, y = 0 },
-    config = { extra = { mult = 0, mod = 5 } },
+    config = { extra = { cost = 2, mod = 2 } },
 
     pixel_size = { w = 43, h = 57 },
     display_size = { w = 43 * 1.3, h = 57 * 1.3 },
 
     loc_vars = function(self, info_queue, card)
-        return {
-            vars = { card.ability.extra.mult, (2^(G.GAME.round_resets.blind_ante-1))*card.ability.extra.mod },
-        }
+		return { vars = { card.ability.extra.cost, card.ability.extra.mod } }
     end,
-
-    calculate = function(self, card, context)
-        if context.joker_main and card.ability.extra.mult > 0 and StockingStuffer.first_calculation then
-            return { mult = -card.ability.extra.mult }
-        end
-	end,
 	
 	use = function(self, card)
-		card.ability.extra.mult = card.ability.extra.mult + (2^(G.GAME.round_resets.blind_ante-1))*card.ability.extra.mod
+		ease_dollars(-card.ability.extra.cost)
+		card.ability.extra.cost = card.ability.extra.cost + card.ability.extra.mod
+		
 		SMODS.draw_cards(1)
 		
 		card:juice_up(0.4,0.4)
@@ -239,6 +233,39 @@ StockingStuffer.Present({
     end,
 	
     can_use = function(self, card)
-		return #G.deck.cards > 0
+		return G.GAME.dollars >= card.ability.extra.cost
     end
+})
+
+StockingStuffer.Present({
+    developer = display_name,
+
+    key = 'clutter',
+    pos = { x = 6, y = 0 },
+    config = { extra = { chips = 0, mod = 16 } },
+
+    pixel_size = { w = 45, h = 48 },
+    display_size = { w = 45 * 1.2, h = 48 * 1.2 },
+
+    loc_vars = function(self, info_queue, card)
+		local count = -3
+		for k, v in pairs(SMODS.Mods) do
+			if v.can_load then count = count + 1 end
+		end
+        return {
+            vars = { card.ability.extra.chips, card.ability.extra.mod }
+        }
+    end,
+
+    calculate = function(self, card, context)
+		if context.buying_card and StockingStuffer.first_calculation then
+			card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.mod
+			
+			return { message = "-"..card.ability.extra.mod }
+		end
+		
+        if context.joker_main and card.ability.extra.chips > 0 and StockingStuffer.first_calculation then
+            return { chips = -chips }
+        end
+	end
 })

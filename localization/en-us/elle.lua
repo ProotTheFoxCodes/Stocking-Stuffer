@@ -45,13 +45,19 @@ return {
             ["ellestuff._stocking_bootleg"] = {
                 name = 'Bootleg Card',
                 text = {
-                    {'{C:red}-#1#{} Mult',
+                    'Pay {C:money}$#1#{} to {C:attention}Draw{} a card',
+					'and increase the cost by {C:money}$#2#',
+					'{stocking}usable'
+                }
+            },
+			["ellestuff._stocking_clutter"] = {
+                name = 'Cluttered Blocks',
+                text = {
+                    {'{C:chips}-#1#{} Chips',
 					'{stocking}before'},
-					{'Draw a card',
-					'This Present {C:attention}permanently',
-					'gains {C:red}-#2#{} Mult',
-					'{C:inactive}(Cost doubles each Ante)',
-					'{stocking}usable'}
+					{'Gains {C:chips}-#2#{} Chips',
+					'every time you',
+					'{C:attention}Purchase{} a card'}
                 }
             }
         }
