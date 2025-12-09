@@ -159,7 +159,7 @@ StockingStuffer.Present({
                                 end
                             end
                             --7 Scholars Acing
-                            if StockingStuffer.GlobalPunk_Jimbmas == 0 and card.ability.trig == false then
+                            if StockingStuffer.GlobalPunk_Jimbmas == 5 and card.ability.trig == false then
                                 card.ability.trig = true
                                 local cards = {}
                                 for i = 1, 7 do
@@ -185,14 +185,12 @@ StockingStuffer.Present({
                                     cards[i]:set_edition(poll_edition('jimbmas_edition', nil, true, true))
                                     G.E_MANAGER:add_event(Event({
                                         func = function()
-                                            --G.play:emplace(cards[i])
                                             cards[i]:start_materialize()
                                             G.GAME.blind:debuff_card(cards[i])
                                             if context.blueprint_card then
                                                 context.blueprint_card:juice_up()
                                             else
-                                                card
-                                                    :juice_up()
+                                                card:juice_up()
                                             end
                                             SMODS.calculate_context({ playing_card_added = true, cards = { cards[i] } })
                                             return true
