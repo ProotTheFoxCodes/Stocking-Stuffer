@@ -54,7 +54,7 @@ return {
                 name = 'Cluttered Blocks',
                 text = {
                     {'{C:chips}-#1#{} Chips',
-					'{C:inactive,s:0.8}(Will not drop below 0)',
+					'{C:inactive,s:0.8}(Will not enter negatives)',
 					'{stocking}after'},
 					{'Gains {C:chips}-#2#{} Chips',
 					'every time you',
