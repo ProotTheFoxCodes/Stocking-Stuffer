@@ -5,17 +5,20 @@ local display_name = 'ProdByProto'
 
 StockingStuffer.colours.active = mix_colours(G.C.GREEN, G.C.JOKER_GREY, 0.8)
 StockingStuffer.colours.inactive = mix_colours(G.C.RED, G.C.JOKER_GREY, 0.8)
+StockingStuffer.colours.next = G.C.BLUE
 
 SMODS.Gradient{
     key = "xCheerBack",
-    colours = { G.C.RED,G.C.GREEN,G.C.GOLD,HEX("FFFBF7")},
-    cycle = 8
+    colours = {G.C.RED,G.C.GREEN,G.C.GOLD,HEX("FFFBF7")},
+    cycle = 8,
+    interpolation = "linear"
 }
 
 SMODS.Gradient{
     key = "xCheerFront",
-    colours = { G.C.WHITE,G.C.WHITE,HEX("FFFBF7"),G.C.UI.TEXT_DARK },
-    cycle = 8
+    colours = {G.C.WHITE,G.C.WHITE,HEX("FFFBF7"),G.C.UI.TEXT_DARK},
+    cycle = 8,
+    interpolation = "linear"
 }
 
 -- Present Atlas Template
@@ -156,7 +159,7 @@ StockingStuffer.Present({
         if context.joker_main and StockingStuffer.second_calculation and card.ability.extra.active then
             return {
                 xmult = card.ability.extra.xmult,
-                message = localize("hornet_drip"),
+                message = localize("proot_hornet_drip"),
             }
         end
 
@@ -250,11 +253,14 @@ StockingStuffer.Present({
             numer1 = 1,
             denom1 = 4,
             numer2 = 1,
-            denom2 = 3
+            denom2 = 3,
+            handQ = 0
         },
     },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.numer1, card.ability.extra.denom1, card.ability.extra.numer2, card.ability.extra.denom2 } }
+        local numer1, denom1 = SMODS.get_probability_vars(card, card.ability.extra.numer1, card.ability.extra.denom1, "planet sold")
+        local numer2, denom2 = SMODS.get_probability_vars(card, card.ability.extra.numer2, card.ability.extra.denom2, "lost discard")
+        return { vars = { numer1, denom1, numer2, denom2 } }
     end,
 
     -- calculate is completely optional, delete if your present does not need it
@@ -264,15 +270,43 @@ StockingStuffer.Present({
         -- StockingStuffer.second_calculation is true after jokers are calculated
         ret = {}
         if context.selling_card and context.card.ability.set == "Planet" and StockingStuffer.first_calculation then
-                    G.GAME.proot_psold = true
+            if G.STATE ~= G.STATES.SELECTING_HAND and SMODS.pseudorandom_probability(card, "shoutouts to aroace vulpienbies", card.ability.extra.numer1, card.ability.extra.denom1, "planet sold") then
+                G.GAME.proot_psold = true
+                card.ability.extra.handQ = card.ability.extra.handQ + 1
+                if card.ability.extra.handQ >= 3 then
+                    ret.sound = "multhit"..(card.ability.extra.handQ % 2) + 1
+                end
+                ret.message = localize("proot_yep")
+                ret.colour = G.C.GREEN
+                ret.extra = {}
+                ret.extra.message = "+"..card.ability.extra.handQ
+                return ret
+            else
+                ret.message = localize("k_nope_ex")
+                ret.colour = G.C.SECONDARY_SET.Tarot
+                return ret
+            end
+            if G.STATE == G.STATES.SELECTING_HAND then
+                G.GAME.proot_psold = true
                 if SMODS.pseudorandom_probability(card, "shoutouts to aroace vulpienbies", card.ability.extra.numer1, card.ability.extra.denom1, "planet sold") then
                     G.GAME.current_round.hands_left = G.GAME.current_round.hands_left + 1
                     ret.message = localize { type = 'variable', key = 'a_hands', vars = { 1 } }
                     return ret
                 else
                     ret.message = localize("k_nope_ex")
+                    ret.colour = G.C.SECONDARY_SET.Tarot
                     return ret
                 end
+            end
+        end
+
+        if context.setting_blind and StockingStuffer.first_calculation then
+            if G.GAME.proot_psold then
+                G.GAME.current_round.hands_left = G.GAME.current_round.hands_left + card.ability.extra.handQ
+                ret.message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.handQ } }
+                card.ability.extra.handQ = 0
+                return ret
+            end
         end
 
         if context.joker_main and StockingStuffer.second_calculation then
@@ -310,7 +344,8 @@ StockingStuffer.Present({
         },
     },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.numer, card.ability.extra.denom, card.ability.extra.xCheer } }
+        local numer, denom = SMODS.get_probability_vars(card, card.ability.extra.numer, card.ability.extra.denom, "Festive Cheer")
+        return { vars = { numer, denom, card.ability.extra.xCheer } }
     end,
 
     -- calculate is completely optional, delete if your present does not need it
@@ -318,14 +353,65 @@ StockingStuffer.Present({
         -- check context and return appropriate values
         -- StockingStuffer.first_calculation is true before jokers are calculated
         -- StockingStuffer.second_calculation is true after jokers are calculated
-        if context.joker_main and StockingStuffer.first_calculation and SMODS.pseudorandom_probability(card, "shoutouts to whatever the religiously neutral equivalent of christmas is", card.ability.extra.numer, card.ability.extra.denom, "Festive Cheer") then
+        if context.before and StockingStuffer.first_calculation and SMODS.pseudorandom_probability(card, "shoutouts to whatever the religiously neutral equivalent of christmas is", card.ability.extra.numer, card.ability.extra.denom, "Festive Cheer") then
             return {
                 message = localize("proot_festive"..pseudorandom("shoutouts to whamageddon", 1, 10)),
-                level_up = G.GAME.hands[context.scoring_name].level * (card.ability.extra.xCheer - 1),
-                xmult = card.ability.extra.xCheer,
-                dollars = G.GAME.dollars * (card.ability.extra.xCheer - 1)
+                level_up = math.floor(G.GAME.hands[context.scoring_name].level * (card.ability.extra.xCheer - 1) * 100) / 100,
+                dollars = math.floor(G.GAME.dollars * (card.ability.extra.xCheer - 1) * 10) / 10,
+                extra = {
+                    xmult = card.ability.extra.xCheer
+                }
             }
         end
+
+    end
+
+})
+
+StockingStuffer.Present({
+    developer = display_name, -- DO NOT CHANGE
+    key = 'spa_set', -- keys are prefixed with 'display_name_stocking_' for reference
+    -- You are encouraged to use the localization file for your name and description, this is here as an example
+    -- loc_txt = {
+    --     name = 'Example Present',
+    --     text = {
+    --         'Does nothing'
+    --     }
+    -- },
+    pos = { x = 3, y = 0 },
+    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
+    -- Addon devs, this is for you. if you plan on making the thing to replace this a joker, change the set to "Joker", it should work with consumables in theory as well. also remember that joker keys start with "j_"
+    config = {
+        extra = {
+            next = {type = "stocking_stocking_present", key = "ProdByProto_stocking_mince_pie"}
+            --next = {type = "present", key = "ProdByProto_stocking_bath_bomb"}
+            --Example:
+            --next = {set = "Joker", key = "j_joker"}
+        },
+    },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { 
+            localize{
+            type = "name_text",
+            set = card.ability.extra.next.set,
+            key = card.ability.extra.next.key
+        } } }
+    end,
+    -- calculate is completely optional, delete if your present does not need it
+    calculate = function(self, card, context)
+        -- check context and return appropriate values
+        -- StockingStuffer.first_calculation is true before jokers are calculated
+        -- StockingStuffer.second_calculation is true after jokers are calculated
+        ret = {}
+        if context.ending_shop and StockingStuffer.first_calculation then
+            SMODS.add_card{
+                key = card.ability.extra.next,
+                area = G.stocking_present.cards
+            }
+            SMODS.destroy_card(card)
+            ret.message = localize("proot_enjoy")
+        end
+
 
     end
 

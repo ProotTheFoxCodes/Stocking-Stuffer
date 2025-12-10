@@ -3,7 +3,10 @@ return {
         dictionary = {
             stocking_stuffer_active = 'active',
             stocking_stuffer_inactive = 'inactive',
-            hornet_drip = "No way, Silksong has dat christmas drip!",
+            stocking_stuffer_next = "Next:",
+            proot_hornet_drip = "No way, Silksong has dat christmas drip!",
+            proot_yep = "Yep!",
+            proot_enjoy = "Enjoy your gift set!",
             proot_festive1 = "Christmas time, mistletoe and wine!",
             proot_festive2 = "Won\'tcha stay another day?",
             proot_festive3 = "Rockin\' around, the christmas tree...",
@@ -66,6 +69,8 @@ return {
                         "{C:green}#1# in #2#{} chance of gaining",
                         "an extra hand when a",
                         "{C:planet}Planet{} card is sold",
+                        "{C:inactive}if not in a blind, gain hands{}",
+                        "{C:inactive}when blind is selected{}"
                     },
                     {
                         "If a {C:planet}Planet{} card was",
@@ -75,19 +80,34 @@ return {
                     }
                 }
             },
-            ProdByProto_stocking_mince_pies = {
+            ProdByProto_stocking_mince_pie = {
                 name = "Mince Pies",
                 text = {
                     {
                         "{C:green}#1# in #2#{} chance of gaining",
-                        "{B:stocking_xCheerBack,V:stocking_xCheerFront}#3#XFestiveCheer{} when hand is played",
+                        "{X:stocking_xcheerback,C:stocking_xcheerfront}#3# X Festive Cheer{} when hand is played",
                         "{stocking}before{}"
                     },
                     {
                         "{C:inactive}What does that mean???{}"
                     }
                 }
-        },
+            },
+            ProdByProto_stocking_spa_set = {
+                name = "Spa Themed Bath Set",
+                text = {
+                    {
+                        "Relaxing bathtime paraphernalia,",
+                        "for your tranquil enjoyment",
+                        "{C:inactive}Gets replaced with the{}",
+                        "{C:inactive}first item in the set{}",
+                        "{C:inactive}at the end of the shop{}"
+                    },
+                    {
+                        "{stocking}next{} #1#"
+                    }
+                }
+            }
         -- stocking_wrapped_present = {
         --     template_stocking_present = {
         --         name = '{V:1}Present',
@@ -98,4 +118,5 @@ return {
         --     },
         -- }
     }
+}
 }
