@@ -4,7 +4,7 @@
 --	Fountain Pen (YEP)
 --	Mystery Star (YEP)
 --	Moss Blade (WAHOO)
---	Emki Plush
+--	Emki Plush (YES) (but i want to add 1 more cosmetic feature)
 --TODO do Kitty Seal / Kitty Stickers work with Splash??????????
 	--answer NO they dont(?)
 --TODO replace math.random
@@ -401,14 +401,14 @@ StockingStuffer.Present({
     pos = { x = 7, y = 0 },
     pixel_size = { w = 53, h = 73 },
 	vman_ch_icon = 3, --emki
-    config = { extra = {xmult = 1, readied = 0, gain = 0.5} },
+    config = { extra = {xmult = 1, readied = 0, gain = 0.25} },
     -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
 
 
     -- use and can_use are completely optional, delete if you do not need your present to be usable
     can_use = function(self, card)
         -- check for use condition here
-        return true
+        return card.ability.extra.xmult ~= 1
     end,
     use = function(self, card, area, copier) 
 		-- do stuff here
@@ -441,23 +441,27 @@ StockingStuffer.Present({
         -- check context and return appropriate values
         -- StockingStuffer.first_calculation is true before jokers are calculated
         -- StockingStuffer.second_calculation is true after jokers are calculated
-        if card.ability.extra.readied ~= 0 then
-			if context.joker_main and StockingStuffer.second_calculation then
-				local lol = card.ability.extra.mult
-				card.ability.extra.xmult = 1
-				card.ability.extra.readied = 0
+		if StockingStuffer.second_calculation then
+			if card.ability.extra.readied ~= 0 then
+				if context.joker_main then
+					local lol = card.ability.extra.xmult
+					card.ability.extra.xmult = 1
+					card.ability.extra.readied = 0
+					return {
+						xmult = lol,
+						sound = "stocking_VMan_2002_splat",
+						message = localize("vman_2002_plush_commit")
+					}
+				end
+				return
+			end
+			if context.end_of_round and context.cardarea == G.stocking_present then
+				card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.gain
 				return {
-					xmult = lol,
-					message = "Wow!",
-					sound = "stocking_VMan_2002_splat"
+					--THIS IS WRONG BUT WHO CARES I HAVE A DEADLINE
+					message = localize("vman_2002_plush_gain_a") .. tostring(card.ability.extra.xmult) .. localize("vman_2002_plush_gain_b")
 				}
 			end
-        elseif context.end_of_round and context.cardarea == G.jokers then
-			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.gain
-			return {
-				--THIS IS WRONG BUT WHO CARES I HAVE A DEADLINE
-				message = localize("vman_2002_plush_gain_a") .. tostring(card.ability.extra.xmult) .. localize("vman_2002_plush_gain_b")
-			}
 		end
     end
 })

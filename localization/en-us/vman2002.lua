@@ -12,8 +12,9 @@ return {
 			vman_2002_plush_inactive = '(Inactive)',
 			vman_2002_plush_gain_a = 'X',
 			vman_2002_plush_gain_b = ' Mult',
+            vman_2002_plush_commit="X#1# Mult",
 			vman_2002_stickers_addseal = '+Seal!',
-			vman_2002_kittyseal_enhance = 'Enhanced!'
+			vman_2002_kittyseal_enhance = 'Enhanced!',
 		}
 	},
     descriptions = {
@@ -74,7 +75,7 @@ return {
 						'{stocking}before{}'
 					}, {
 						flavor .. "Critical Hit to the enemy's Weak Point!",
-						'{C:mult}Mult{} is applied as {X:mult,C:white}XMult{} + 1 when',
+						'{C:mult}Mult{} is applied as {X:mult,C:white}XMult{C:mult} + 1{} when',
 						'played hand is a {C:attention}Straight Flush',
 						'{stocking}after{}'
 					}
@@ -86,13 +87,13 @@ return {
 					{
 						'Gains {X:mult,C:white}X#1#{} Mult per round',
 						'{C:attention}Resets{} to {X:mult,C:white}X1{} after use',
-						"{C:inactive}#3#",
-						"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
 						'{stocking}after{}',
 					}, {
 						flavor .. "Whack this plushie against the",
 						flavor .. "Blind in your next hand",
 						flavor .. "(It makes a loud thud...?)",
+						"{C:inactive}#3#",
+						"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
 						'{stocking}usable{}'
 					}
                 }
