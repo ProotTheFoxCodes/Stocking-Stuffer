@@ -450,6 +450,10 @@ StockingStuffer.Present({
         return { vars = { card.ability.extra.chips, card.ability.extra.card_mod, card.ability.extra.chips_mod, thing } }
     end,
 
+    in_pool = function(self,args)
+        return false
+    end,
+
     -- calculate is completely optional, delete if your present does not need it
     calculate = function(self, card, context)
         -- check context and return appropriate values
@@ -480,6 +484,7 @@ StockingStuffer.Present({
         if context.joker_main and StockingStuffer.second_calculation then
             card.ability.extra.chips = card.ability.extra.chips - (card.ability.extra.cardQ * card.ability.extra.chips_mod)
             if card.ability.extra.chips <= 0 then
+                card:juice_up()
                 SMODS.add_card{
                 key = card.ability.extra.next.key,
                 area = G.stocking_present
@@ -526,6 +531,12 @@ StockingStuffer.Present({
             set = card.ability.extra.next.set,
             key = card.ability.extra.next.key } } }
     end,
+    
+    in_pool = function(self,args)
+        return false
+    end,
+
+
     -- use and can_use are completely optional, delete if you do not need your present to be usable
     can_use = function(self, card)
         -- check for use condition here
@@ -579,17 +590,32 @@ StockingStuffer.Present({
             set = card.ability.extra.next.set,
             key = card.ability.extra.next.key } } }
     end,
+    
+    in_pool = function(self,args)
+        return false
+    end,
+
     -- use and can_use are completely optional, delete if you do not need your present to be usable
     can_use = function(self, card)
         -- check for use condition here
-        return true
+        return #G.jokers.cards >= 1
     end,
     use = function(self, card, area, copier) 
         -- do stuff here
+        cards = {}
         for i=1,#G.jokers.cards do
-            if G.jokers.cards[i].ability.perishable then
-
+            if G.jokers.cards[i].ability.perishable or G.jokers.cards[i].debuff then
+                table.insert(cards, i)
             end
+        end
+        if #cards >= 1 then
+            thing = pseudorandom_element(cards, "remove debuffs")
+            G.jokers.cards[thing].ability.perishable = false
+            G.jokers.cards[thing].ability.debuff = false
+        else
+            smelly = pseudorandom_element(G.jokers.cards, "make it scented")
+            scent = pseudorandom_element({ "e_foil", "e_polychrome", "e_negative" }, "scent to apply")
+            smelly:set_edition(scent)
         end
         SMODS.add_card{
             key = card.ability.extra.next.key,
@@ -621,7 +647,11 @@ StockingStuffer.Present({
         },
     },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult, card.ability.extra.active and "active" or "inactive" } }
+        return { vars = { card.ability.extra.active and "active" or "inactive" } }
+    end,
+
+    in_pool = function(self,args)
+        return false
     end,
 
     -- use and can_use are completely optional, delete if you do not need your present to be usable

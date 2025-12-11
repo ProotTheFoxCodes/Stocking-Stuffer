@@ -33,7 +33,7 @@ return {
                     {
                         "{C:inactive}You may use this present to{}",
                         "{C:inactive}toggle its effect{}",
-                        "{stocking}#2#{}"
+                        "{stocking}usable{}, {stocking}#2#{}"
                     }
                 }
             },
@@ -74,8 +74,8 @@ return {
                     },
                     {
                         "If a {C:planet}Planet{} card was",
-                        "sold this round, there is a {C:green}#3# in #4#{} chance",
-                        "of losing a discard when hand is played",
+                        "sold this round, {C:green}#3# in #4#{} chance",
+                        "to lose a discard when hand is played",
                         "{stocking}after{}"
                     }
                 }
@@ -167,6 +167,21 @@ return {
                         "{C:inactive}As a token of appreciation,{}",
                         "{C:inactive}we hope you enjoy this relaxation playlist.{}",
                         "{stocking}next{} #1#"
+                    }
+                }
+            },
+            ProdByProto_stocking_list = {
+                name = "Relaxing Playlist",
+                text = {
+                    {
+                        "Relaxing ambient synth drones",
+                        "with meandering melodic ideas.",
+                        "Enjoy :3"
+                    },
+                    {
+                        "Use this present to",
+                        "toggle the custom music",
+                        "{stocking}usable{}, {stocking}#1#{}"
                     }
                 }
             }
