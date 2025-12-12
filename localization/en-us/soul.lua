@@ -1,11 +1,22 @@
 return {
     descriptions = {
         stocking_present = {
-            ["Spectral Pack_stocking_rapier"] = {
+            Kitty_stocking_rapier = {
                 name = "Soldier's Rapier",
-                text = {}
+                text = { {
+                    "If played hand contains",
+                    "a single card, increase",
+                    "blind requirement by {C:attention}#1#%",
+                    "{stocking}before"
+                }, {
+                    "Earn {C:money}$#2#{} at end",
+                    "of round for each time",
+                    "this present triggered",
+                    "{C:inactive}(Currently {C:money}$#3#{C:inactive})",
+                    "{stocking}after"
+                } }
             },
-            ["Spectral Pack_stocking_skull"] = {
+            Kitty_stocking_skull = {
                 name = "Jester's Skull",
                 text = { {
                     "{C:green}#1# in #2#{} chance to {C:red}discard",
@@ -17,7 +28,7 @@ return {
                     "{stocking}after"
                 } }
             },
-            ["Spectral Pack_stocking_chalice"] = {
+            Kitty_stocking_chalice = {
                 name = "Cupbearer's Chalice",
                 text = { {
                     "{C:green}#1# in #2#{} chance to apply",
@@ -30,13 +41,33 @@ return {
                     "{stocking}after"
                 } }
             },
-            ["Spectral Pack_stocking_knife"] = {
+            Kitty_stocking_knife = {
                 name = "Actor's Knife",
-                text = {}
+                text = { {
+                    "Gains {X:mult,C:white}X#1#{} Mult when",
+                    "a face card is {C:red}discarded",
+                    "{C:attention}Reset{} at end of round",
+                    "{stocking}before"
+                }, {
+                    "If played hand contains a",
+                    "pair of face cards,",
+                    "destroy a random card",
+                    "held in hand",
+                    "{stocking}after"
+                } }
             },
-            ["Spectral Pack_stocking_crown"] = {
+            Kitty_stocking_crown = {
                 name = "Fool's Crown",
-                text = {}
+                text = { {
+                    "Played #1#s give {C:money}$#3#{} when scored",
+                    "{stocking}before"
+                }, {
+                    "Gains {X:mult,C:white}X#4#{} Mult per scored #2#",
+                    "{C:inactive}(Currently {X:mult,C:white}X#5#{C:inactive})",
+                    "{stocking}after"
+                }, {
+                    "Ranks switch at end of round"
+                } }
             }
         }
     }

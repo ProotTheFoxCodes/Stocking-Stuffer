@@ -1,6 +1,6 @@
 -- Developer name - Replace 'template' with your display name
 -- Note: This will be used to link your objects together, and be displayed under the name of your additions
-local display_name = 'Spectral Pack'
+local display_name = 'Kitty'
 -- MAKE SURE THIS VALUE HAS BEEN CHANGED
 
 
@@ -19,6 +19,7 @@ SMODS.Atlas({
 -- Note: This object is how your WrappedPresent and Presents get linked
 StockingStuffer.Developer({
     name = display_name, -- DO NOT CHANGE
+    coder = { "DigitalDetective47" },
 
     -- Replace '000000' with your own hex code
     -- Used to colour your name and some particles when opening your present
@@ -66,6 +67,47 @@ StockingStuffer.WrappedPresent({
 
 -- Present Template - Replace 'template' with your name
 -- Note: You should make up to 5 Presents to fill your Wrapped Present!
+StockingStuffer.Present({
+    developer = display_name, -- DO NOT CHANGE
+
+    key = 'rapier',           -- keys are prefixed with 'display_name_stocking_' for reference
+    -- You are encouraged to use the localization file for your name and description, this is here as an example
+    -- loc_txt = {
+    --     name = 'Example Present',
+    --     text = {
+    --         'Does nothing'
+    --     }
+    -- },
+    config = { extra = { buff = 30, money_factor = 2, dollars = 0 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.buff, card.ability.extra.money_factor, card.ability.extra.dollars } }
+    end,
+    pos = { x = 1, y = 0 },
+    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
+
+
+    -- use and can_use are completely optional, delete if you do not need your present to be usable
+
+    -- calculate is completely optional, delete if your present does not need it
+    calculate = function(self, card, context)
+        -- check context and return appropriate values
+        -- StockingStuffer.first_calculation is true before jokers are calculated
+        -- StockingStuffer.second_calculation is true after jokers are calculated
+        if StockingStuffer.first_calculation and context.before and #context.full_hand == 1 then
+            G.GAME.blind.chips = G.GAME.blind.chips * (1 + card.ability.extra.buff / 100)
+            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+            SMODS.scale_card(card,
+                { ref_table = card.ability.extra, ref_value = "dollars", scalar_value = "money_factor" })
+        end
+    end,
+    calc_dollar_bonus = function(self, card)
+        ---@type integer
+        local ret = card.ability.extra.dollars
+        card.ability.extra.dollars = 0
+        return ret
+    end
+})
+
 StockingStuffer.Present({
     developer = display_name, -- DO NOT CHANGE
 
@@ -171,6 +213,99 @@ StockingStuffer.Present({
                     end })
                 end
             }
+        end
+    end
+})
+
+StockingStuffer.Present({
+    developer = display_name, -- DO NOT CHANGE
+
+    key = 'knife',            -- keys are prefixed with 'display_name_stocking_' for reference
+    -- You are encouraged to use the localization file for your name and description, this is here as an example
+    -- loc_txt = {
+    --     name = 'Example Present',
+    --     text = {
+    --         'Does nothing'
+    --     }
+    -- },
+    config = { extra = { scaling = 0.2, xmult = 1 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.scaling, card.ability.extra.xmult } }
+    end,
+    pos = { x = 4, y = 0 },
+    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
+
+
+    -- use and can_use are completely optional, delete if you do not need your present to be usable
+
+    -- calculate is completely optional, delete if your present does not need it
+    calculate = function(self, card, context)
+        -- check context and return appropriate values
+        -- StockingStuffer.first_calculation is true before jokers are calculated
+        -- StockingStuffer.second_calculation is true after jokers are calculated
+        if StockingStuffer.first_calculation and context.discard and context.other_card:is_face() then
+            SMODS.scale_card(card,
+                { ref_table = card.ability.extra, ref_value = "xmult", scalar_value = "scaling" })
+        elseif StockingStuffer.second_calculation and context.after and context.cardarea == G.stocking_present and next(G.hand.cards) then
+            for _, other in ipairs(context.poker_hands.Pair) do
+                if other[1]:is_face() then
+                    G.E_MANAGER:add_event(Event { func = function()
+                        card:juice_up(0.5, 0.3)
+                        return true
+                    end })
+                    SMODS.destroy_cards(pseudorandom_element(G.hand.cards, pseudoseed(self.key)))
+                    break
+                end
+            end
+        elseif context.end_of_round and StockingStuffer.second_calculation and context.cardarea == G.stocking_present then
+            card.ability.extra.xmult = 1
+            return { message = localize("k_reset") }
+        end
+    end
+})
+
+StockingStuffer.Present({
+    developer = display_name, -- DO NOT CHANGE
+
+    key = 'crown',            -- keys are prefixed with 'display_name_stocking_' for reference
+    -- You are encouraged to use the localization file for your name and description, this is here as an example
+    -- loc_txt = {
+    --     name = 'Example Present',
+    --     text = {
+    --         'Does nothing'
+    --     }
+    -- },
+    config = { extra = { before_rank = "King", after_rank = "Queen", dollars = 2, xmult_scaling = 0.1, xmult = 1 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.before_rank, card.ability.extra.after_rank, card.ability.extra.dollars, card.ability.extra.xmult_scaling, card.ability.extra.xmult } }
+    end,
+    pos = { x = 5, y = 0 },
+    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
+
+
+    -- use and can_use are completely optional, delete if you do not need your present to be usable
+
+    -- calculate is completely optional, delete if your present does not need it
+    calculate = function(self, card, context)
+        -- check context and return appropriate values
+        -- StockingStuffer.first_calculation is true before jokers are calculated
+        -- StockingStuffer.second_calculation is true after jokers are calculated
+        if context.individual and context.cardarea == G.play and not context.end_of_round then
+            if StockingStuffer.first_calculation and context.other_card.base.value == card.ability.extra.before_rank then
+                return { dollars = card.ability.extra.dollars }
+            elseif StockingStuffer.second_calculation and context.other_card.base.value == card.ability.extra.after_rank then
+                return {
+                    func = function()
+                        SMODS.scale_card(card,
+                            { ref_table = card.ability.extra, ref_value = "xmult", scalar_value = "xmult_scaling" })
+                    end
+                }
+            end
+        elseif context.joker_main and StockingStuffer.second_calculation then
+            return { xmult = card.ability.extra.xmult }
+        elseif context.end_of_round and StockingStuffer.second_calculation and context.cardarea == G.stocking_present then
+            card.ability.extra.before_rank, card.ability.extra.after_rank =
+                card.ability.extra.after_rank, card.ability.extra.before_rank
         end
     end
 })
