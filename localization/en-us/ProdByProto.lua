@@ -32,8 +32,8 @@ return {
                     },
                     {
                         "{C:inactive}You may use this present to{}",
-                        "{C:inactive}toggle its effect{}",
-                        "{stocking}usable{}, {stocking}#2#{}"
+                        "{C:inactive}toggle its effect#2#{}",
+                        "{stocking}usable{}, {stocking}#3#{}"
                     }
                 }
             },
@@ -157,6 +157,7 @@ return {
                         "- If there are none, a random joker",
                         "will instead become {C:edition}Foil, Polychrome,{}",
                         "or {C:dark_edition}Negative{} scented",
+                        "{C:inactive}- Effect can apply to{} {C:dark_edtion)editioned{}{C:inactive} jokers{}",
                         "{stocking}usable{}"
                     },
                     {

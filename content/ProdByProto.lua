@@ -21,6 +21,21 @@ SMODS.Gradient{
     interpolation = "linear"
 }
 
+SMODS.Sound{
+    key = "music_silksong",
+    path = "music_silksong_drip.ogg",
+    pitch = 1,
+    volume = 0.9,
+    sync = {
+        ["music1"] = true
+    },
+    select_music_track = function (self)
+    if not G.screenwipe and G.GAME.drip then
+      return 1.7e308
+    end
+  end,
+}
+
 -- Present Atlas Template
 -- Note: You are allowed to create more than one atlas if you need to use weird dimensions
 -- We recommend you name your atlas with your display_name included
@@ -128,12 +143,17 @@ StockingStuffer.Present({
     -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
     config = {
         extra = {
-            active = true,
-            xmult = 1.25,
+            active = false,
+            xmult = 1.5,
+            first_time = false
         },
     },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult, card.ability.extra.active and "active" or "inactive" } }
+        return { vars = { card.ability.extra.xmult, card.ability.extra.first_time and "." or ", inactive by default.", card.ability.extra.active and "active" or "inactive" } }
+    end,
+
+    in_pool = function(self,args)
+        return not next(SMODS.find_card("ProdByProto_stocking_grinch_socks"))
     end,
 
     -- use and can_use are completely optional, delete if you do not need your present to be usable
@@ -143,8 +163,12 @@ StockingStuffer.Present({
     end,
     use = function(self, card, area, copier) 
         -- do stuff here
+        card.ability.extra.first_time = true
         card.ability.extra.active = not card.ability.extra.active
-        -- PLEASE REMEMBER TO DO SMODS.SOUND STUFF HERE FFS
+        G.GAME.drip = card.ability.extra.active
+        if G.GAME.list and G.GAME.drip then
+            G.GAME.list = false
+        end
     end,
     keep_on_use = function(self, card)
         -- return true when card should be kept
@@ -162,7 +186,6 @@ StockingStuffer.Present({
                 message = localize("proot_hornet_drip"),
             }
         end
-
 
     end
 
@@ -339,7 +362,7 @@ StockingStuffer.Present({
         extra = {
             numer = 1,
             denom = 6,
-            xCheer = 1.25,
+            xCheer = 1.5,
             
         },
     },
@@ -356,7 +379,7 @@ StockingStuffer.Present({
         if context.before and StockingStuffer.first_calculation and SMODS.pseudorandom_probability(card, "shoutouts to whatever the religiously neutral equivalent of christmas is", card.ability.extra.numer, card.ability.extra.denom, "Festive Cheer") then
             return {
                 message = localize("proot_festive"..pseudorandom("shoutouts to whamageddon", 1, 10)),
-                level_up = math.max(math.floor(G.GAME.hands[context.scoring_name].level * (card.ability.extra.xCheer - 1) * 10) / 10, 1),
+                level_up = math.max(math.floor(G.GAME.hands[context.scoring_name].level) * (card.ability.extra.xCheer - 1), 1),
                 dollars = math.floor(G.GAME.dollars * (card.ability.extra.xCheer - 1) * 10) / 10,
                 extra = {
                     xmult = card.ability.extra.xCheer
@@ -397,6 +420,11 @@ StockingStuffer.Present({
             key = card.ability.extra.next.key
         } } }
     end,
+
+    in_pool = function(self,args)
+        return not G.GAME.spa_set
+    end,
+
     -- calculate is completely optional, delete if your present does not need it
     calculate = function(self, card, context)
         -- check context and return appropriate values
@@ -404,6 +432,7 @@ StockingStuffer.Present({
         -- StockingStuffer.second_calculation is true after jokers are calculated
         ret = {}
         if context.ending_shop and StockingStuffer.first_calculation then
+            G.GAME.spa_set = true
             SMODS.add_card{
                 key = card.ability.extra.next.key,
                 area = G.stocking_present
@@ -549,9 +578,12 @@ StockingStuffer.Present({
                 G.GAME.blind:disable()
             else
                 G.GAME.blind.chips = G.GAME.blind.chips / 2
+                G.GAME.blind.chips = ch
+				G.GAME.blind.chip_text = number_format(ch)
             end
         else
             G.GAME.blind.chips = G.GAME.blind.chips / 2
+            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
         end
         SMODS.add_card{
             key = card.ability.extra.next.key,
@@ -617,10 +649,13 @@ StockingStuffer.Present({
             scent = pseudorandom_element({ "e_foil", "e_polychrome", "e_negative" }, "scent to apply")
             smelly:set_edition(scent)
         end
-        SMODS.add_card{
-            key = card.ability.extra.next.key,
-            area = G.stocking_present
-        }
+        G.GAME.spa_set = false
+        if not next(SMODS.find_card(card.ability.extra.next.key)) then
+            SMODS.add_card{
+                key = card.ability.extra.next.key,
+                area = G.stocking_present
+            }
+        end
     end,
     keep_on_use = function(self, card)
         -- return true when card should be kept
