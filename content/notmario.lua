@@ -750,6 +750,7 @@ StockingStuffer.Present({
         return G.STATE == G.STATES.SELECTING_HAND and G.GAME.blind.boss
     end,
     use = function(self, card)
+        G.GAME.blind:disable()
         G.GAME.blind:set_blind(G.P_BLINDS["bl_stocking_the_paul"])
         ease_background_colour_blind(G.STATE)
         local pitch = (4 + card.ability.extra.times_used) / (5 + card.ability.extra.times_used * 0.5)
