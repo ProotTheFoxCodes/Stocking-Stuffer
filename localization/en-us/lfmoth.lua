@@ -45,7 +45,7 @@ return {
                         '{C:white,X:red}X#1#{} {C:red}Mult{}',
                         'Goes down by {C:white,X:red}X#2#{}',
                         'per {C:attention}ante{} passed',
-                        '{C:inactive}Does nothing after ante 8{}',
+                        '{C:inactive}(Does nothing after ante 8){}',
                         '{stocking}after'
                 }
             }
