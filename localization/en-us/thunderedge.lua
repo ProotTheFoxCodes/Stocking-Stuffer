@@ -31,7 +31,7 @@ return {
 				name = "Cappy",
 				text = {
 					{
-						"{C:attention}Duplicates{} a random Present",
+						"{C:attention}Duplicates{} a random {C:green}Present",
 						"{C:red}-#1#{} hand size when used",
 						"{C:inactive}(Hand size penalty increases",
 						"{C:inactive}by {C:red}#2#{C:inactive} per use of this Present)",
