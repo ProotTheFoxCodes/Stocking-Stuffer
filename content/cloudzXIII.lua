@@ -18,7 +18,7 @@ SMODS.Atlas({
 
 StockingStuffer.Developer({
     name = display_name,
-    colour = HEX('FCCF50')
+    colour = HEX('FCCF50'),
 })
 
 StockingStuffer.WrappedPresent({
@@ -102,7 +102,7 @@ StockingStuffer.Present({
 
     key = 'keyblade',
     pos = { x = 1, y = 0 },
-    config = { extra = { ready = false } },
+    config = { extra = { ready = true } },
 
     can_use = function(self, card)
         return card.ability.extra.ready
@@ -143,7 +143,7 @@ StockingStuffer.Present({
         extra = {
              base = 1,
              odds = 25,
-             ready = false,
+             ready = true,
              base_gain = 2
         }
     },
@@ -233,46 +233,35 @@ StockingStuffer.Present({
     pos = { x = 3, y = 0 },
     config = {
         extra = {
-            enhancements = {},
-            dollars = 1
+            mult = 3,
+            chips = 10,
+            x_mult = 1.1,
+            dollars = 1,
         }
     },
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
-                card.ability.extra.dollars
+                card.ability.extra.mult,
+                card.ability.extra.chips,
+                card.ability.extra.x_mult,
+                card.ability.extra.dollars,
             }
         }
     end,
     calculate = function(self, card, context)
-        if StockingStuffer.first_calculation and context.before and not context.blueprint then
-            for _, scored_card in ipairs(context.scoring_hand) do
-                card.ability.extra.enhancements[scored_card] = scored_card.config.center.key
-                local enhancement = SMODS.poll_enhancement { key = "kh_seed", guaranteed = true }
-                scored_card:set_ability(enhancement, true)
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        scored_card:juice_up()
-                        return true
-                    end
-                }))
-            end
-        end
-
-        if StockingStuffer.second_calculation and context.final_scoring_step  then
-            for _, scored_card in ipairs(context.scoring_hand) do
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        scored_card:set_ability(card.ability.extra.enhancements[scored_card], true)
-                        card.ability.extra.enhancements[scored_card] = nil
-                        scored_card:juice_up()
-                        return true
-                    end
-                }))
-            end
-            return {
-                dollars = -card.ability.extra.dollars * #context.scoring_hand,
+        if StockingStuffer.first_calculation and context.individual and context.cardarea == G.play and not context.blueprint and not context.repetition then
+            local bonuses = {
+                { mult = card.ability.extra.mult },
+                { chips = card.ability.extra.chips },
+                { dollars = -card.ability.extra.dollars },
+                { x_mult = card.ability.extra.x_mult },
+                { message = localize('k_jimbostorm') }
             }
+
+            local choice = pseudorandom_element(bonuses, "cloudzXIII_jimbostorm")
+
+            return choice
         end
     end
 })

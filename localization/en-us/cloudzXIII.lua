@@ -1,7 +1,8 @@
 return {
     misc = {
         dictionary = {
-            yoyo_destroyed = "Snapped!",
+            yoyo_destroyed = 'Snapped!',
+            k_jimbostorm = 'Eat my shorts!',
         },
     },
     descriptions = {
@@ -9,9 +10,9 @@ return {
             cloudzXIII_stocking_yoyo = {
                 name = 'Yo-Yo',
                 text = {
-                    {"Retrigger all cards played",
-                    "{stocking}before{}"},
-                    {"{C:red,E:2}Destroy a random card played",
+                    {'Retrigger all played cards',
+                    '{stocking}before{}'},
+                    {'{C:red,E:2}Destroy a random card played',
                     '{stocking}after{}',
                     '{C:inactive,s:0.8}no strings attached!'}
 
@@ -42,14 +43,14 @@ return {
                 }
             },
             cloudzXIII_stocking_jimbostorm = {
-                name = 'Jimbostorm',
+                name = '    Jimbostorm    ',
                 text = {
-                    {'Scored cards temporarily gain',
-                    'a random {C:attention}Enhancement{}',
+                    {'Played cards give',
+                    'random {C:attention}bonuses{}',
+                    'when scored:',
                     '{stocking}before{}'},
-                    {'Lose {C:red}$#1#{} for',
-                    'every card scored',
-                    '{stocking}after{}',
+                    {'{s:0.8,X:mult,C:white}X#3#{} {s:0.8}Mult, {s:0.8,C:red}-$#4#{}',
+					'{s:0.8,C:mult}+#1#{} {s:0.8}Mult, {s:0.8,C:chips}+#2#{} {s:0.8}Chips',
                     '{C:inactive,s:0.8}eat my shorts'}
                 }
             },
@@ -60,7 +61,7 @@ return {
                     'every {C:attention}#3#{} {C:inactive}(#4#){} cards',
                     'discarded this round',
                     '{C:inactive}(Currently {C:chips}+#1#{} {C:inactive}Chips)',
-                    "{C:inactive,s:0.8}hey... this was Terry's!"}
+                    "{C:inactive,s:0.8}...i thought this was Terry's?"}
 
                 }
             },
