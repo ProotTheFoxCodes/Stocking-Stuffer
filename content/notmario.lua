@@ -611,19 +611,23 @@ StockingStuffer.Present({
     pixel_size = { w = 64, h = 24 },
     display_size = { w = 64 * 1.25, h = 24 * 1.25 },
     artist = { "pangaea47" },
-    blueprint_compat = false
-})
-
--- apply magnifier
--- lowkey hate this but Whatever
-local ssc = SMODS.scale_card
-SMODS.scale_card = function(card, args)
-    local speed_factor = 2 ^ #SMODS.find_card("notmario_stocking_magnifier")
-    
-    for i = 1, speed_factor do
-        ssc(card, args)
+    blueprint_compat = false,
+    calc_scaling = function(self, _self, card, initial, scalar_value, args)
+        if args.operation == 'X' then
+            local sqrt = 1
+            -- if we get a negative value for this i have no fucking clue
+            -- what it should do so just ignore it
+            if scalar_value >= 0 then sqrt = math.sqrt(scalar_value) end
+            return {
+                override_scalar_value = { value = scalar_value * sqrt }
+            }
+        else
+            return {
+                override_scalar_value = { value = scalar_value * 1.5 }
+            }
+        end
     end
-end
+})
 
 StockingStuffer.Present({
     developer = display_name,

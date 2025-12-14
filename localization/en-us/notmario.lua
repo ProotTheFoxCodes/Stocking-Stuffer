@@ -33,7 +33,7 @@ return {
                 name = 'Magnifying Glass',
                 text = {
                     {'{C:attention}Scaling Jokers{} ',
-                    '{C:green,E:1}scale{} {C:attention}twice{} as fast'},
+                    '{C:green,E:1}scale{} {C:attention}50%{} faster'},
                 }
             },
             ["notmario_stocking_hydraulic_press"] = {
