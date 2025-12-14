@@ -94,10 +94,6 @@ StockingStuffer.Present({
         return true
     end,
     calculate = function(self, card, context)
-       if context.first_hand_drawn and not context.blueprint then
-            local eval = function() return card.ability.extra.ready and not G.RESET_JIGGLES end
-            juice_card_until(card, eval, true)
-        end
         if context.setting_blind and not context.blueprint and StockingStuffer.first_calculation then
             card.ability.extra.ready = true
             return {
@@ -176,7 +172,7 @@ StockingStuffer.Present({
                 end
             }))
         end
-        if card.ability.extra.base <= card.ability.extra.odds then
+        if card.ability.extra.base < card.ability.extra.odds then
             SMODS.calculate_effect({ message = localize('k_upgrade_ex') }, card)
             card.ability.extra.base = card.ability.extra.base + card.ability.extra.base_gain
         end
@@ -187,10 +183,6 @@ StockingStuffer.Present({
     end,
 
     calculate = function(self, card, context)
-        if context.first_hand_drawn and not context.blueprint then
-            local eval = function() return card.ability.extra.ready and not G.RESET_JIGGLES end
-            juice_card_until(card, eval, true)
-        end
         if context.setting_blind and not context.blueprint and StockingStuffer.first_calculation then
             card.ability.extra.ready = true
             return {
