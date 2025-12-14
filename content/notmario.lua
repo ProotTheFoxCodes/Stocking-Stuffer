@@ -611,17 +611,18 @@ StockingStuffer.Present({
     pixel_size = { w = 64, h = 24 },
     display_size = { w = 64 * 1.25, h = 24 * 1.25 },
     artist = { "pangaea47" },
-    blueprint_compat = true
+    blueprint_compat = false
 })
 
 -- apply magnifier
-local scalcieff = SMODS.calculate_individual_effect
-SMODS.calculate_individual_effect = function(effect, scored_card, key, amount, from_edition)
-  local mult_scale = 2 ^ #SMODS.find_card("notmario_stocking_magnifier")
-  if key == "mult" or key == "h_mult" or key == "mult_mod" then
-    amount = amount * mult_scale
-  end
-  return scalcieff(effect, scored_card, key, amount, from_edition)
+-- lowkey hate this but Whatever
+local ssc = SMODS.scale_card
+SMODS.scale_card = function(card, args)
+    local speed_factor = 2 ^ #SMODS.find_card("notmario_stocking_magnifier")
+    
+    for i = 1, speed_factor do
+        ssc(card, args)
+    end
 end
 
 StockingStuffer.Present({
