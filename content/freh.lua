@@ -69,19 +69,26 @@ StockingStuffer.Present({
     end,
     calculate = function(self, card, context)
         if context.joker_main and StockingStuffer.first_calculation and pseudorandom('3d_printer') < G.GAME.probabilities.normal / card.ability.extra.odds * card.ability.extra.state then
-			G.E_MANAGER:add_event(Event({
-				trigger = 'after',
-				delay = 0.4,
-				func = function()
-				SMODS.add_card({ set = (card.ability.extra.state >= 3 and 'stocking_present') or 'Joker',
-				area = card.ability.extra.state >= 3 and G.stocking_present,
-				rarity = card.ability.extra.state < 3 and 0.5})
-				return true
+			SMODS.calculate_effect({message = (card.ability.extra.state >= 3 and localize('k_plus_present')) or (card.ability.extra.state < 3 and localize('k_plus_joker'))}, card)
+			if card.ability.extra.state < 3 then
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after', delay = 0.7,
+					func = function()        
+						G.FUNCS.toggle_jokers_presents()
+						return true
+					end
+				}))
 			end
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after', delay = 0.7,
+                func = function()                
+                        local _c = SMODS.add_card({ set = (card.ability.extra.state >= 3 and 'stocking_present') or 'Joker',
+						area = card.ability.extra.state >= 3 and G.stocking_present,
+						rarity = card.ability.extra.state < 3 and 0.5, skip_materialize = true})
+                        _c:start_materialize()
+                    return true
+                end
 			}))
-			return {
-				message = (card.ability.extra.state >= 3 and localize('k_plus_present')) or (card.ability.extra.state < 3 and localize('k_plus_joker')),
-            }
         end
     end,
 	use = function(self, card)
@@ -129,6 +136,7 @@ StockingStuffer.Present({
 		return { vars = { card.ability.extra.cards } }
     end,
     use = function(self, card)
+		G.FUNCS.toggle_jokers_presents()
 		for i = 1, G.jokers.config.card_limit - #G.jokers.cards do
 			G.E_MANAGER:add_event(Event({
 				trigger = 'after',
