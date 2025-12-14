@@ -58,3 +58,29 @@ StockingStuffer.Present({
         end
     end
 })
+
+StockingStuffer.Present({
+    developer = display_name,
+    key = "bananas",
+    pos = { x = 0, y = 0 },
+    config = { extra = { mult = 20, odds = 6 }},
+    loc_vars = function (self, info_queue, card)
+        local n, d = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, self.key)
+        return { vars = { card.ability.extra.mult, n, d, card.ability.extra.mult*(1000/self.config.extra.mult) }}
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+        if context.end_of_round and StockingStuffer.first_calculation then
+            local l = card.ability.extra.mult
+            for _ = 1, l do
+                if SMODS.pseudorandom_probability(card, self.key, 1, card.ability.extra.odds) then
+                    card.ability.extra.mult = card.ability.extra.mult - 1
+                end
+            end
+        end
+    end
+})
