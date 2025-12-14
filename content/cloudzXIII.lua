@@ -74,29 +74,6 @@ local function MostPlayedHand()
     return _handname
 end
 
-local function RandomPokerHand()
-    local poker_hands = {}
-    local total_weight = 0
-    for _, handname in ipairs(G.handlist) do
-        if G.GAME.hands[handname].visible then
-            local weight = G.GAME.hands[handname].played + 1
-            total_weight = total_weight + weight
-            poker_hands[#poker_hands + 1] = { handname, total_weight }
-        end
-    end
-
-    local weight = pseudorandom("keyblade") * total_weight
-    local hand
-    for _, h in ipairs(poker_hands) do
-        if weight < h[2] then
-            hand = h[1]
-            break
-        end
-    end
-
-    return hand
-end
-
 StockingStuffer.Present({
     developer = display_name,
 
@@ -111,9 +88,6 @@ StockingStuffer.Present({
         card.ability.extra.ready = false
         local _hand = MostPlayedHand()
 		SMODS.smart_level_up_hand(card, _hand, nil, 1)
-
-        local rnd_hand = RandomPokerHand()
-        SMODS.smart_level_up_hand(card, rnd_hand, nil, -1)
 		return nil, true
     end,
     keep_on_use = function(self, card)

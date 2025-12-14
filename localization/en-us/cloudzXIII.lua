@@ -27,8 +27,6 @@ return {
                     {
                     '{C:green}+1{} level to {C:attention}most played',
                     '{C:legendary,E:1}poker hand{}',
-                    '{C:red}-1{} level to a {C:attention}random',
-                    '{C:legendary,E:1}poker hand{}',
                     '{C:inactive,s:0.9}Can only be used once per round',
                     '{C:money,s:0.75}may your heart be your guiding key',
                     '{stocking}usable{}',
