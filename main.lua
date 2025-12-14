@@ -482,6 +482,7 @@ function G.UIDEF.card_h_popup(card)
     local obj = card.config.center
     if obj and obj.set and (obj.set == 'stocking_present' or obj.set == 'stocking_wrapped_present') then
         ret_val.nodes[1].nodes[1].nodes[1].config.colour = G.C.L_BLACK
+        local dev = StockingStuffer.Developers[obj.developer]
         local tag = {
             n = G.UIT.R,
             config = { align = 'tm' },
@@ -491,8 +492,8 @@ function G.UIDEF.card_h_popup(card)
                     n = G.UIT.O,
                     config = {
                         object = DynaText({
-                            string = StockingStuffer.Developers[obj.developer].name,
-                            colours = { StockingStuffer.Developers[obj.developer].colour or G.C.UI.BACKGROUND_WHITE },
+                            string = dev.loc and localize(dev.loc) or dev.name,
+                            colours = { dev.colour or G.C.UI.BACKGROUND_WHITE },
                             bump = true,
                             silent = true,
                             pop_in = 0,
@@ -558,6 +559,22 @@ function Card:juice_up(scale, rot)
         end
     end
     stocking_stuffer_card_juice_up(self, scale, rot)
+end
+
+local stocking_stuffer_card_start_dissolve = Card.start_dissolve
+function Card:start_dissolve(...)
+    if self.area and not self.ability.no_stocking and not self.states.hover.is and ((self.area == G.jokers and StockingStuffer.states.slot_visible ~= 1) or (self.area == G.stocking_present and StockingStuffer.states.slot_visible ~= -1)) then
+        G.FUNCS.toggle_jokers_presents()
+        for i=1, 2 do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after', delay = 0.7,
+                func = function()                
+                    return true
+                end
+            }), nil, true)
+        end
+    end
+    stocking_stuffer_card_start_dissolve(self, ...)
 end
 
 local stocking_stuffer_card_eval_status_text = card_eval_status_text
