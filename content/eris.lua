@@ -7,6 +7,7 @@ local display_name = 'Eris'
 -- Present Atlas Template
 -- Note: You are allowed to create more than one atlas if you need to use weird dimensions
 -- We recommend you name your atlas with your display_name included
+-- should be the default for all presents created
 SMODS.Atlas({
     key = display_name..'_presents',
     path = 'presents.png',
@@ -29,60 +30,31 @@ StockingStuffer.Developer({
 -- key defaults to 'display_name_stocking_present'
 StockingStuffer.WrappedPresent({
     developer = display_name, -- DO NOT CHANGE
-
-    pos = { x = 0, y = 0 }, -- position of present sprite on your atlas
-    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
-
-    -- Your present will be given an automatically generated name and description. If you want to customise it you can, though we recommend keeping the {V:1} in the name
-    -- You are encouraged to use the localization file for your name and description, this is here as an example
-    -- loc_txt = {
-    --     name = '{V:1}Present',
-    --     text = {
-    --         '  {C:inactive}What could be inside?  ',
-    --         '{C:inactive}Open me to find out!'
-    --     }
-    -- },
+    pos = { x = 0, y = 0 },
+    --localization optional
 })
 
 -- Present Template - Replace 'template' with your name
 -- Note: You should make up to 5 Presents to fill your Wrapped Present!
 StockingStuffer.Present({
     developer = display_name, -- DO NOT CHANGE
-
-    key = 'filler_1', -- keys are prefixed with 'display_name_stocking_' for reference
-    -- You are encouraged to use the localization file for your name and description, this is here as an example
-    -- loc_txt = {
-    --     name = 'Example Present',
-    --     text = {
-    --         'Does nothing'
-    --     }
-    -- },
+    key = 'evil_bomb', -- keys are prefixed with 'display_name_stocking_' for reference
     pos = { x = 0, y = 0 },
-    -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
-
-
-    -- use and can_use are completely optional, delete if you do not need your present to be usable
-    can_use = function(self, card)
-        -- check for use condition here
-        return true
+    config = { extra = { max = 6, count = 0 }},
+    loc_vars = function (self, info_queue, card)
+        return { vars = { card.ability.extra.max, card.ability.extra.count }}
     end,
-    use = function(self, card, area, copier) 
-        -- do stuff here
-        print('example')
-    end,
-    keep_on_use = function(self, card)
-        -- return true when card should be kept
-    end,
-
     -- calculate is completely optional, delete if your present does not need it
     calculate = function(self, card, context)
-        -- check context and return appropriate values
-        -- StockingStuffer.first_calculation is true before jokers are calculated
-        -- StockingStuffer.second_calculation is true after jokers are calculated
-        if context.joker_main then
-            return {
-                message = 'example'
-            }
+        if context.after then
+            if card.ability.extra.count >= card.ability.extra.max then
+                card.ability.extra.count = 0
+            else
+                card.ability.extra.count = card.ability.extra.count
+            end
+        end
+        if context.destroy_card and card.ability.extra.count >= card.ability.extra.max then
+            return { remove = true }
         end
     end
 })
