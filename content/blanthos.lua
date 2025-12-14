@@ -218,8 +218,12 @@ StockingStuffer.Present({
     developer = display_name, -- DO NOT CHANGE
 
     key = 'slime', -- keys are prefixed with 'display_name_stocking_' for reference
-    pos = { x = 0, y = 0 },
+    pos = { x = 3, y = 0 },
     config = { extra = 0.1 },
+		    -- Adjusts the hitbox on the item
+    pixel_size = { w = 38, h = 37 },
+    -- Adjusts the scale (it's too small by default)
+    display_size = { w = 38 * 1.5, h = 37 * 1.5 },
  loc_vars = function(self, info_queue, card)
         return {
             vars = { card.ability.extra },
