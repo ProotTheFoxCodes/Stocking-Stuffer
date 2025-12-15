@@ -36,6 +36,46 @@ SMODS.Sound{
   end,
 }
 
+SMODS.Sound{
+    key = "music_list1",
+    path = "music_list1.ogg",
+    pitch = 1,
+    volume = 0.8,
+    select_music_track = function (self)
+        if not G.screenwipe and G.GAME.play_list and G.GAME.play_track == 1 then
+            return 1.7e308
+        end
+    end
+}
+
+SMODS.Sound{
+    key = "music_list2",
+    path = "music_list2.ogg",
+    pitch = 1,
+    volume = 0.8,
+    select_music_track = function (self)
+        if not G.screenwipe and G.GAME.play_list and G.GAME.play_track == 2 then
+            return 1.7e308
+        end
+    end
+}
+
+SMODS.Sound{
+    key = "music_list3",
+    path = "music_list3.ogg",
+    pitch = 1,
+    volume = 0.8,
+    sync = {
+        ["music_list1"] = true,
+        ["music_list2"] = true,
+    },
+    select_music_track = function (self)
+        if not G.screenwipe and G.GAME.play_list and G.GAME.play_track == 3 then
+            return 1.7e308
+        end
+    end
+}
+
 -- Present Atlas Template
 -- Note: You are allowed to create more than one atlas if you need to use weird dimensions
 -- We recommend you name your atlas with your display_name included
@@ -166,8 +206,8 @@ StockingStuffer.Present({
         card.ability.extra.first_time = true
         card.ability.extra.active = not card.ability.extra.active
         G.GAME.drip = card.ability.extra.active
-        if G.GAME.list and G.GAME.drip then
-            G.GAME.list = false
+        if G.GAME.play_list and G.GAME.drip then
+            G.GAME.play_list = false
         end
     end,
     keep_on_use = function(self, card)
@@ -380,7 +420,7 @@ StockingStuffer.Present({
             return {
                 message = localize("proot_festive"..pseudorandom("shoutouts to whamageddon", 1, 10)),
                 level_up = math.max(math.floor(G.GAME.hands[context.scoring_name].level) * (card.ability.extra.xCheer - 1), 1),
-                dollars = math.floor(G.GAME.dollars * (card.ability.extra.xCheer - 1) * 10) / 10,
+                dollars = math.floor(G.GAME.dollars * (card.ability.extra.xCheer - 1)),
                 extra = {
                     xmult = card.ability.extra.xCheer
                 }
@@ -664,6 +704,25 @@ StockingStuffer.Present({
 
 })
 
+songLength = 256
+local playlistEvent
+playlistEvent = {
+    trigger = "after",
+    delay = songLength,
+    --start_timer = true,
+    no_delete = true,
+    pause_force = true,
+    blockable = false,
+    blocking = false,
+    func = function()
+        if G.GAME.play_list then
+            G.GAME.play_track = pseudorandom("pick relaxing track", 1, 3)
+            G.E_MANAGER:add_event(Event(playlistEvent))
+        end
+        return true
+    end
+}
+
 StockingStuffer.Present({
     developer = display_name, -- DO NOT CHANGE
     key = 'list', -- keys are prefixed with 'display_name_stocking_' for reference
@@ -678,7 +737,7 @@ StockingStuffer.Present({
     -- atlas defaults to 'stocking_display_name_presents' as created earlier but can be overriden
     config = {
         extra = {
-            active = true
+            active = false
         },
     },
     loc_vars = function(self, info_queue, card)
@@ -697,7 +756,14 @@ StockingStuffer.Present({
     use = function(self, card, area, copier) 
         -- do stuff here
         card.ability.extra.active = not card.ability.extra.active
-        -- PLEASE REMEMBER TO DO SMODS.SOUND STUFF HERE FFS
+        G.GAME.play_list = card.ability.extra.active
+        if G.GAME.play_list and G.GAME.drip then
+            G.GAME.drip = false
+        end
+        if G.GAME.play_list then
+            G.GAME.play_track = pseudorandom("pick relaxing track", 1, 3)
+            G.E_MANAGER:add_event(Event(playlistEvent))
+        end
     end,
     keep_on_use = function(self, card)
         -- return true when card should be kept

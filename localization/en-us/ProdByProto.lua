@@ -176,7 +176,7 @@ return {
                 text = {
                     {
                         "Relaxing ambient synth drones",
-                        "with meandering melodic ideas.",
+                        "with meandering musical ideas.",
                         "Enjoy :3"
                     },
                     {
