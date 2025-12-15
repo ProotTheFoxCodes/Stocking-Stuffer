@@ -156,7 +156,7 @@ StockingStuffer.Present({
     end,
     calculate = function(self, card, context)
         if context.joker_main and StockingStuffer.first_calculation and card.ability.extra.active then
-            print("beans")
+            --print("beans")
             return {mult = card.ability.extra.mult}
         elseif context.after and StockingStuffer.first_calculation then
             if card.ability.extra.active then
