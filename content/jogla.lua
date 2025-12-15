@@ -36,7 +36,7 @@ StockingStuffer.Developer({
 StockingStuffer.WrappedPresent({
     developer = display_name, -- DO NOT CHANGE
     atlas = display_name..'_presents_gf',
-    artist = {'Golden Leaf'},
+    artist = {'[REDACTED]Autumn'},
     pos = { x = 0, y = 0 },
 })
 
@@ -178,7 +178,7 @@ StockingStuffer.Present({
 
 StockingStuffer.Present({
     developer = display_name, -- DO NOT CHANGE
-    artist = {'Golden Leaf'},
+    artist = {'[REDACTED]Autumn'},
     key = 'shuffler', -- keys are prefixed with 'display_name_stocking_' for reference
     config = {
         extra = {
