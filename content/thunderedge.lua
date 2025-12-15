@@ -806,7 +806,7 @@ function StockingStuffer.ThunderEdge.voice(key, card)
 	if key == "metamorphosis" then
 		local s = math.random(1, 11)
 		local fac = math.random() * 0.1 + 1
-		play_sound("voice" .. s, (fac), 0.5)
+		play_sound("voice" .. s, fac, 0.5)
 		card:juice_up()
 		G.E_MANAGER:add_event(Event({
 			trigger = "after",
@@ -2116,21 +2116,36 @@ StockingStuffer.Present({
 	end,
 	use = function(self, card)
 		card.ability.extra.used = true
+		SMODS.calculate_effect({ message = localize("k_plus_joker") }, card)
 		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			delay = 0.7,
+			func = function()
+				G.FUNCS.toggle_jokers_presents()
+				return true
+			end,
+		}))
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			delay = 0.7,
 			func = function()
 				play_sound("timpani")
-				if pseudorandom("thunderedge_void_heart", 1, 1000) <= 500 then
-					SMODS.add_card({
+				local _c
+				if pseudorandom("thunderedge_void_heart", 1, 1000) <= 5 then
+					_c = SMODS.add_card({
 						set = "Joker",
 						legendary = true,
 						rarity = "Legendary",
+						skip_materialize = true
 					})
 				else
-					SMODS.add_card({
+					_c = SMODS.add_card({
 						set = "Joker",
 						rarity = "Rare",
+						skip_materialize = true
 					})
 				end
+				_c:start_materialize()
 				return true
 			end,
 		}))
