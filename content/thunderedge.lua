@@ -229,34 +229,34 @@ StockingStuffer.Present({
 
 --#region I apologize in advance to whoever has to debug or review this chunk of code
 
-SMODS.Sound({
-	key = "hurt",
-	path = "snd_hurt1.wav",
-})
-SMODS.Sound({
-	key = "graze",
-	path = "snd_graze.wav",
-})
-SMODS.Sound({
-	key = "anything",
-	path = "snd_joker_anything.wav",
-})
-SMODS.Sound({
-	key = "byebye",
-	path = "snd_joker_byebye.wav",
-})
-SMODS.Sound({
-	key = "metamorphosis",
-	path = "snd_joker_metamorphosis.wav",
-})
-SMODS.Sound({
-	key = "oh",
-	path = "snd_joker_oh.wav",
-})
-SMODS.Sound({
-	key = "chaos",
-	path = "snd_joker_chaos.wav",
-})
+-- SMODS.Sound({
+-- 	key = "hurt",
+-- 	path = "snd_hurt1.wav",
+-- })
+-- SMODS.Sound({
+-- 	key = "graze",
+-- 	path = "snd_graze.wav",
+-- })
+-- SMODS.Sound({
+-- 	key = "anything",
+-- 	path = "snd_joker_anything.wav",
+-- })
+-- SMODS.Sound({
+-- 	key = "byebye",
+-- 	path = "snd_joker_byebye.wav",
+-- })
+-- SMODS.Sound({
+-- 	key = "metamorphosis",
+-- 	path = "snd_joker_metamorphosis.wav",
+-- })
+-- SMODS.Sound({
+-- 	key = "oh",
+-- 	path = "snd_joker_oh.wav",
+-- })
+-- SMODS.Sound({
+-- 	key = "chaos",
+-- 	path = "snd_joker_chaos.wav",
+-- })
 
 ---@type love.Drawable
 StockingStuffer.ThunderEdge.sprites = {}
@@ -533,7 +533,7 @@ function StockingStuffer.ThunderEdge.start_attack(trigger_card)
 						message = localize("thunderedge_hit"),
 						colour = G.C.RED,
 						instant = true,
-						sound = "stocking_hurt",
+						sound = "timpani",
 					},
 				})
 				self.invincibility = 1
@@ -557,7 +557,7 @@ function StockingStuffer.ThunderEdge.start_attack(trigger_card)
 						message = localize("thunderedge_graze"),
 						colour = G.C.GREEN,
 						instant = true,
-						sound = "stocking_graze",
+						sound = "generic1",
 					},
 				})
 				p.graze_cd = 0.5
@@ -686,14 +686,214 @@ function StockingStuffer.ThunderEdge.get_angle(origin, target)
 	return -(theta + math.pi)
 end
 
+function StockingStuffer.ThunderEdge.voice(key, card)
+	if key == "anything" then
+		local snd = math.random(1, 11)
+		play_sound("voice" .. snd, (math.random() * 0.1 + 1), 0.5)
+		card:juice_up()
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.25,
+			func = function()
+				local s = math.random(1, 11)
+				play_sound("voice" .. s, (math.random() * 0.1 + 0.95), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.375,
+			func = function()
+				local s = math.random(1, 11)
+				play_sound("voice" .. s, (math.random() * 0.1 + 0.9), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+		local fac = math.random() * 0.1 + 1
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.6,
+			func = function()
+				local snd2 = math.random(1, 11)
+				play_sound("voice" .. snd2, fac, 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.75,
+			func = function()
+				local snd2 = math.random(1, 11)
+				play_sound("voice" .. snd2, (fac - 0.1), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.9,
+			func = function()
+				local snd2 = math.random(1, 11)
+				play_sound("voice" .. snd2, (fac - 0.1), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+	end
+	if key == "chaos" then
+		local s = math.random(1, 11)
+		local fac = math.random() * 0.1 + 1
+		play_sound("voice" .. s, fac, 0.5)
+		card:juice_up()
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.15,
+			func = function()
+				play_sound("voice" .. s, (fac - 0.1), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+		local fac2 = math.random() * 0.2 + 1
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.4,
+			func = function()
+				local s2 = math.random(1, 11)
+				play_sound("voice" .. s2, fac2, 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.55,
+			func = function()
+				local s2 = math.random(1, 11)
+				play_sound("voice" .. s2, (fac2 - 0.1), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+	end
+	if key == "metamorphosis" then
+		local s = math.random(1, 11)
+		local fac = math.random() * 0.1 + 1
+		play_sound("voice" .. s, (fac), 0.5)
+		card:juice_up()
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.2,
+			func = function()
+				local s1 = math.random(1, 11)
+				play_sound("voice" .. s1, (fac - 0.1), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.4,
+			func = function()
+				local s1 = math.random(1, 11)
+				play_sound("voice" .. s1, (fac - 0.05), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.6,
+			func = function()
+				local s1 = math.random(1, 11)
+				play_sound("voice" .. s1, (fac - 0.1), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.8,
+			func = function()
+				local s1 = math.random(1, 11)
+				play_sound("voice" .. s1, (fac - 0.1), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+	end
+	if key == "oh" then
+		local s = math.random(1, 11)
+		play_sound("voice" .. s, (math.random() * 0.1 + 1), 0.5)
+		card:juice_up()
+	end
+	if key == "byebye" then
+		local s = math.random(1, 11)
+		play_sound("voice" .. s, (math.random() * 0.1 + 0.9), 0.5)
+		card:juice_up()
+		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			blockable = false,
+			blocking = false,
+			pause_force = true,
+			delay = 0.3,
+			func = function()
+				local s1 = math.random(1, 11)
+				play_sound("voice" .. s1, (math.random() * 0.1 + 1), 0.5)
+				card:juice_up()
+				return true
+			end,
+		}))
+	end
+end
+
 function StockingStuffer.ThunderEdge.diamond_rain()
 	local voice = math.random(1, 3)
 	if voice == 1 then
-		play_sound("stocking_anything")
+		StockingStuffer.ThunderEdge.voice("anything", StockingStuffer.ThunderEdge.player.trigger_card)
 	elseif voice == 2 then
-		play_sound("stocking_byebye")
+		StockingStuffer.ThunderEdge.voice("byebye", StockingStuffer.ThunderEdge.player.trigger_card)
 	else
-		play_sound("stocking_chaos")
+		StockingStuffer.ThunderEdge.voice("chaos", StockingStuffer.ThunderEdge.player.trigger_card)
 	end
 	for i = 1, 80 do
 		G.E_MANAGER:add_event(
@@ -765,9 +965,7 @@ function StockingStuffer.ThunderEdge.small_spades()
 		G.E_MANAGER:add_event(
 			Event({
 				func = function()
-					if i % 2 == 1 then
-						play_sound("stocking_oh")
-					end
+					StockingStuffer.ThunderEdge.voice("oh", StockingStuffer.ThunderEdge.player.trigger_card)
 					local w, h =
 						StockingStuffer.ThunderEdge.BASE_GAME_DIMS.x, StockingStuffer.ThunderEdge.BASE_GAME_DIMS.y
 					local origin = {
@@ -847,11 +1045,11 @@ end
 function StockingStuffer.ThunderEdge.spade_circles()
 	local voice = math.random(1, 3)
 	if voice == 1 then
-		play_sound("stocking_anything")
+		StockingStuffer.ThunderEdge.voice("anything", StockingStuffer.ThunderEdge.player.trigger_card)
 	elseif voice == 2 then
-		play_sound("stocking_byebye")
+		StockingStuffer.ThunderEdge.voice("byebye", StockingStuffer.ThunderEdge.player.trigger_card)
 	else
-		play_sound("stocking_chaos")
+		StockingStuffer.ThunderEdge.voice("chaos", StockingStuffer.ThunderEdge.player.trigger_card)
 	end
 	for i = 1, 5 do
 		local angle = math.random() * math.pi * 2
@@ -933,8 +1131,8 @@ function StockingStuffer.ThunderEdge.small_diamonds()
 		G.E_MANAGER:add_event(
 			Event({
 				func = function()
-					if i % 3 == 1 then
-						play_sound("stocking_oh")
+					if i % 2 == 1 then
+						StockingStuffer.ThunderEdge.voice("oh", StockingStuffer.ThunderEdge.player.trigger_card)
 					end
 					local w, h =
 						StockingStuffer.ThunderEdge.BASE_GAME_DIMS.x, StockingStuffer.ThunderEdge.BASE_GAME_DIMS.y
@@ -1013,7 +1211,7 @@ function StockingStuffer.ThunderEdge.devilsknife()
 	local dir = math.random() > 0.5 and 1 or -1
 	local flip_fac = 2.35 + math.random() * 0.3
 	local rotate_fac = 2.8 + math.random() * 0.4
-	play_sound("stocking_metamorphosis")
+	StockingStuffer.ThunderEdge.voice("metamorphosis", StockingStuffer.ThunderEdge.player.trigger_card)
 	for i = 0, 3 do
 		G.E_MANAGER:add_event(
 			Event({
@@ -1077,11 +1275,11 @@ end
 function StockingStuffer.ThunderEdge.heart_bombs()
 	local voice = math.random(1, 3)
 	if voice == 1 then
-		play_sound("stocking_anything")
+		StockingStuffer.ThunderEdge.voice("anything", StockingStuffer.ThunderEdge.player.trigger_card)
 	elseif voice == 2 then
-		play_sound("stocking_byebye")
+		StockingStuffer.ThunderEdge.voice("byebye", StockingStuffer.ThunderEdge.player.trigger_card)
 	else
-		play_sound("stocking_chaos")
+		StockingStuffer.ThunderEdge.voice("chaos", StockingStuffer.ThunderEdge.player.trigger_card)
 	end
 	for i = 1, 14 do
 		local dir = math.random() > 0.5 and 1 or -1
@@ -1203,11 +1401,11 @@ end
 function StockingStuffer.ThunderEdge.spade_bombs()
 	local voice = math.random(1, 3)
 	if voice == 1 then
-		play_sound("stocking_anything")
+		StockingStuffer.ThunderEdge.voice("anything", StockingStuffer.ThunderEdge.player.trigger_card)
 	elseif voice == 2 then
-		play_sound("stocking_byebye")
+		StockingStuffer.ThunderEdge.voice("byebye", StockingStuffer.ThunderEdge.player.trigger_card)
 	else
-		play_sound("stocking_chaos")
+		StockingStuffer.ThunderEdge.voice("chaos", StockingStuffer.ThunderEdge.player.trigger_card)
 	end
 	for i = 1, 20 do
 		G.E_MANAGER:add_event(
@@ -1298,11 +1496,11 @@ end
 function StockingStuffer.ThunderEdge.diamond_bombs()
 	local voice = math.random(1, 3)
 	if voice == 1 then
-		play_sound("stocking_anything")
+		StockingStuffer.ThunderEdge.voice("anything", StockingStuffer.ThunderEdge.player.trigger_card)
 	elseif voice == 2 then
-		play_sound("stocking_byebye")
+		StockingStuffer.ThunderEdge.voice("byebye", StockingStuffer.ThunderEdge.player.trigger_card)
 	else
-		play_sound("stocking_chaos")
+		StockingStuffer.ThunderEdge.voice("chaos", StockingStuffer.ThunderEdge.player.trigger_card)
 	end
 	for i = 1, 20 do
 		G.E_MANAGER:add_event(
@@ -1392,11 +1590,11 @@ end
 function StockingStuffer.ThunderEdge.club_bombs()
 	local voice = math.random(1, 3)
 	if voice == 1 then
-		play_sound("stocking_anything")
+		StockingStuffer.ThunderEdge.voice("anything", StockingStuffer.ThunderEdge.player.trigger_card)
 	elseif voice == 2 then
-		play_sound("stocking_byebye")
+		StockingStuffer.ThunderEdge.voice("byebye", StockingStuffer.ThunderEdge.player.trigger_card)
 	else
-		play_sound("stocking_chaos")
+		StockingStuffer.ThunderEdge.voice("chaos", StockingStuffer.ThunderEdge.player.trigger_card)
 	end
 	for i = 1, 16 do
 		G.E_MANAGER:add_event(
@@ -1487,11 +1685,11 @@ end
 function StockingStuffer.ThunderEdge.all_bombs()
 	local voice = math.random(1, 3)
 	if voice == 1 then
-		play_sound("stocking_anything")
+		StockingStuffer.ThunderEdge.voice("anything", StockingStuffer.ThunderEdge.player.trigger_card)
 	elseif voice == 2 then
-		play_sound("stocking_byebye")
+		StockingStuffer.ThunderEdge.voice("byebye", StockingStuffer.ThunderEdge.player.trigger_card)
 	else
-		play_sound("stocking_chaos")
+		StockingStuffer.ThunderEdge.voice("chaos", StockingStuffer.ThunderEdge.player.trigger_card)
 	end
 	for i = 1, 20 do
 		local selector = math.random(1, 4)
