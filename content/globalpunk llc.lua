@@ -104,6 +104,9 @@ StockingStuffer.Present({
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         if StockingStuffer.GlobalPunk_Jimbmas >= 0 then
+                            if StockingStuffer.GlobalPunk_Jimbmas >= 12 then
+                                card:start_dissolve({ G.C.RED }, nil, 1.6)
+                            end
                             --AND A JOKER THAT RETRIGGEREDDDDD
                             if StockingStuffer.GlobalPunk_Jimbmas == 11 and card.ability.trig == false then
                                 card.ability.trig = true
