@@ -71,6 +71,9 @@ return {
 	  k_exploded_ex = "Exploded!",
 	  k_plus_present = "+1 Present",
 	  k_swap_ex = "Swap!",
+      k_freh_present = "Present",
+      k_freh_joker = "Joker",
+      k_freh_common = "Common "
     }
   }
 }

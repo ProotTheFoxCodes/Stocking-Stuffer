@@ -65,10 +65,20 @@ StockingStuffer.Present({
 	disable_use_animation = true,
 	config = { extra = { odds = 2, state = 1, odds_multplier = 3,  }},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.odds * card.ability.extra.state, G.GAME.probabilities.normal, (card.ability.extra.state >= 3 and "Present") or "Joker", (card.ability.extra.state < 3 and "Present") or "Joker", (card.ability.extra.state >= 3 and "") or "Common ", } }
+		local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds * card.ability.extra.state, "")
+		return {
+			vars = {
+				num,
+				denom,
+				(card.ability.extra.state >= 3 and localize("k_freh_present")) or localize("k_freh_joker"),
+				(card.ability.extra.state < 3 and localize("k_freh_present")) or localize("k_freh_joker"),
+				(card.ability.extra.state >= 3 and "") or localize("k_freh_common"),
+			}
+		}
     end,
     calculate = function(self, card, context)
-        if context.joker_main and StockingStuffer.first_calculation and pseudorandom('3d_printer') < G.GAME.probabilities.normal / card.ability.extra.odds * card.ability.extra.state then
+        if context.joker_main and StockingStuffer.first_calculation
+			and SMODS.pseudorandom_probability(card, "3d_printer", 1, card.ability.extra.odds * card.ability.extra.state, "3d_printer") then
 			SMODS.calculate_effect({message = (card.ability.extra.state >= 3 and localize('k_plus_present')) or (card.ability.extra.state < 3 and localize('k_plus_joker'))}, card)
 			if card.ability.extra.state < 3 then
 				G.E_MANAGER:add_event(Event({
