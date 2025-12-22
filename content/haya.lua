@@ -190,7 +190,7 @@ local draw = Game.draw
 ---@diagnostic disable-next-line
 function Game:draw()
 	draw(self)
-	if G and G.GAME and G.GAME.haya_can_jumpscare and ((not love.window.hasFocus()) or G.GAME.haya_force_jumpscare) then
+	if G and G.GAME and G.GAME.haya_can_jumpscare and ((not love.window.hasFocus()) or G.GAME.haya_force_jumpscare) and StockingStuffer.config.enable_jumpscare then
 		local scaleX = love.graphics.getWidth() / irisu:getWidth()
 		local scaleY = love.graphics.getHeight() / irisu:getHeight()
 		local scale = math.max(scaleX, scaleY)

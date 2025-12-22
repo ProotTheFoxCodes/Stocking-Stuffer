@@ -1,5 +1,6 @@
 return {
     menu = true,
     animate_areas = 1,
-    switch_on_trigger = true
+    switch_on_trigger = true,
+    enable_jumpscare = false
 }

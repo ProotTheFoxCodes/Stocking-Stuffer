@@ -70,6 +70,28 @@ StockingStuffer.config_tab = function()
                 },
             },
 
+            -- Enable Jumpscare Toggle
+            {
+                n = G.UIT.R,
+                config = { align = "cm", padding = 0 },
+                nodes = {
+                    {
+                        n = G.UIT.C,
+                        config = { align = "cl", padding = 0.05 },
+                        nodes = {
+                            create_toggle { col = true, label = "", scale = 1, w = 0, shadow = true, ref_table = StockingStuffer.config, ref_value = "enable_jumpscare" },
+                        }
+                    },
+                    {
+                        n = G.UIT.C,
+                        config = { align = "c", padding = 0 },
+                        nodes = {
+                            { n = G.UIT.T, config = { text = localize('b_stocking_jumpscare'), scale = 0.45, colour = G.C.UI.TEXT_LIGHT } },
+                        }
+                    },
+                },
+            },
+
             -- Switch Areas on Trigger Toggle
             {
                 n = G.UIT.R,
