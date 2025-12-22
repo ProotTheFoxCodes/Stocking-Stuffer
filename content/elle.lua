@@ -55,7 +55,7 @@ StockingStuffer.Present({
         end
 		
 		if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-			if card.ability.extra.xmult == 1 then
+			if card.ability.extra.xmult <= 1 then
 				SMODS.destroy_cards(card, nil, nil, true)
 				return {
 					message = localize('elle_novelty')
