@@ -1052,6 +1052,11 @@ G.FUNCS.can_toggle_presents = function(e)
     end
 end
 
+local should_handle = SMODS.should_handle_limit
+function SMODS.should_handle_limit(area)
+    return area.config.type == "stocking_stuffer_hide" or should_handle(self)
+end
+
 -- Area toggle helpers
 function StockingStuffer.animate_areas()
     StockingStuffer.states.areas_moving = true
