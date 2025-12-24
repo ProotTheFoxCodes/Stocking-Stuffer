@@ -232,7 +232,7 @@ StockingStuffer.Present({
             local fall = pseudoseed('rs_butter')
             if fall <= (card.ability.extra*0.01) and G.jokers and #G.jokers.cards > 0 then
                 local ran_joker = pseudorandom_element(G.jokers.cards, pseudoseed('butter'))
-                draw_card(G.jokers,G.stocking_present, 100/1,'up', nil, ran_joker)
+                ran_joker.ability.extra_slots_used = -1
             end
         end
     end

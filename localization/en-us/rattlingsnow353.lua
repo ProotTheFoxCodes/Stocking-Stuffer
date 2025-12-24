@@ -29,9 +29,9 @@ return {
             ["RattlingSnow353_stocking_butter"] = {
                 name = 'Butter!',
                 text = {
-                    '{C:dark_edition}#1#%{} chance for a {C:attention}Joker{} to fall',
-                    'into a {C:stocking_present}Present{} slot when',
-                    'blind is {C:attention}defeated',
+                    'When {C:attention}Blind{} is defeated,',
+                    '{C:dark_edition}#1#%{} chance for a random {C:attention}Joker{} to become',
+                    '{C:attention}slippery{} and take up {C:attention}0{} Joker slots',
                     "{C:inactive}Can't Hold It",
                     '{stocking}before{}'
                 }
