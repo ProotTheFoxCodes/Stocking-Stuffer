@@ -1054,7 +1054,7 @@ end
 
 local should_handle = SMODS.should_handle_limit
 function SMODS.should_handle_limit(area)
-    return area.config.type == "stocking_stuffer_hide" or should_handle(self)
+    return area.config.type == "stocking_stuffer_hide" or should_handle(area)
 end
 
 -- Area toggle helpers
