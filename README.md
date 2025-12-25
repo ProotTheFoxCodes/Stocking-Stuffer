@@ -77,3 +77,5 @@ Participants were tasked with creating up to 5 Presents for players to unwrap fr
 - Eremel
 - WilsontheWolf
 - canicao
+
+## Are you a developer or artist interested in participating in these events yourself? Join the Potato Patch Discord Server! https://discord.gg/sSPMcUucvz
