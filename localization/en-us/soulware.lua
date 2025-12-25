@@ -30,7 +30,8 @@ return {
                 -- like a lump of coal, but its clay!
                 name = 'Lump of Clay',
                 text = {
-                    "{C:attention}Become{} the right present",
+                    "{C:attention}Transforms{} into the",
+                    "{C:stocking_present}Present{} to the right",
                     "{stocking}usable{}"
                 }
             },
