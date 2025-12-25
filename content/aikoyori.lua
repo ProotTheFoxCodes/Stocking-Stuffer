@@ -157,7 +157,7 @@ StockingStuffer.Present({
     calculate = function(self, card, context)
         if context.using_consumeable and context.consumeable and context.consumeable.ability and not context.repetition and 
             context.consumeable.ability.set and StockingStuffer.aikoyori.lower_tier_consumable_map[context.consumeable.ability.set] 
-            and not context.consumeable.ability.stocking_aiko_activated then
+            and not context.consumeable.ability.stocking_aiko_activated and StockingStuffer.first_calculation then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                 context.consumeable.ability.stocking_aiko_activated = true
                 G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
