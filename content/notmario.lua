@@ -270,8 +270,8 @@ StockingStuffer.WrappedPresent({
     draw = function(self, card, layer)
         card.children.center:set_sprite_pos({x = 0, y = should_draw_3d() and 99 or 1})
         if (card.config.center.discovered or card.bypass_discovery_center) and should_draw_3d() then
-            local x_scale = card.children.center.T.w * 100 / G.TILESCALE / 71 * card.T.scale
-            local z_scale = card.children.center.T.h * 100 / G.TILESCALE / 71 * card.T.scale
+            local x_scale = card.children.center.T.w * 30 / 71 * card.T.scale
+            local z_scale = card.children.center.T.h * 30 / 71 * card.T.scale
             draw_3d_model(card, 71 * x_scale, 71 * z_scale, wrapped_verts, wrapped_cols, wrapped_models)
         end
     end,
@@ -979,8 +979,8 @@ StockingStuffer.Present({
     draw = function(self, card, layer)
         card.children.center:set_sprite_pos({x = 2, y = should_draw_3d() and 99 or 1})
         if (card.config.center.discovered or card.bypass_discovery_center) and should_draw_3d() then
-            local x_scale = card.children.center.T.w * 100 / G.TILESCALE / 71 * card.T.scale
-            local z_scale = card.children.center.T.h * 100 / G.TILESCALE / 71 * card.T.scale
+            local x_scale = card.children.center.T.w * 30 / 71 * card.T.scale
+            local z_scale = card.children.center.T.h * 30 / 71 * card.T.scale
             draw_3d_model(card, 85 * x_scale, 85 * z_scale, tungsten_verts, tungsten_cols, tungsten_models)
         end
     end,
