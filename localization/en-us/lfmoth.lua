@@ -9,7 +9,7 @@ return {
                 },
                 text = {
                     'Earn {C:money}$#1#{}',
-                    'for each {C:attention}Present{}',
+                    'for each {C:stocking_present}Present{}',
                     'you have',
                     '{stocking}before'
                 }
@@ -17,8 +17,8 @@ return {
             ["LFMoth_stocking_giftapult"] = {
                 name = 'Giftapult',
                 text = {
-                    'Creates a {C:attention}present',
-                    'every ante',
+                    'Creates a {C:stocking_present}present',
+                    'when {C:attention}Ante{} changes',
                     '{stocking}before'
                 }
             },
@@ -42,10 +42,10 @@ return {
             ["LFMoth_stocking_8crazyantes"] = {
                 name = '8 Crazy Antes on DVD',
                 text = {
-                        '{C:white,X:red}X#1#{} {C:red}Mult{}',
-                        'Goes down by {C:white,X:red}X#2#{}',
-                        'per {C:attention}ante{} passed',
-                        '{C:inactive}(Does nothing after ante 8){}',
+                        '{C:white,X:red}X#1#{} Mult',
+                        'Loses {C:white,X:red}X#2#{} Mult per {C:attention}Ante{}',
+                        '{C:inactive}(Currently {C:white,X:red}X#3#{C:inactive} Mult){}',
+                        '{C:inactive}(Minimum of {C:white,X:red}X1{C:inactive} Mult){}',
                         '{stocking}after'
                 }
             }

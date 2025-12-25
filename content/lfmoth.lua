@@ -127,7 +127,7 @@ StockingStuffer.Present({
     pos = { x = 5, y = 0 },
     config = { extra = { startingxmult = 4, xmult = 4, decrease = 0.5 } },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult, card.ability.extra.decrease } }
+        return { vars = { card.ability.extra.startingxmult, card.ability.extra.decrease, card.ability.extra.xmult } }
     end,
     add_to_deck = function(self, card, from_debuff)
         card.ability.extra.xmult = card.ability.extra.startingxmult - (card.ability.extra.decrease * (G.GAME.round_resets.ante - 1))
