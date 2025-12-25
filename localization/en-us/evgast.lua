@@ -70,7 +70,7 @@ return {
             },
         },
         stocking_wrapped_present = {
-            template_stocking_present = {
+            Evgast_stocking_present = {
                 name = '{V:1}Box Shaped Present',
                 text = {
                     '  {C:inactive}This is a box  ',
