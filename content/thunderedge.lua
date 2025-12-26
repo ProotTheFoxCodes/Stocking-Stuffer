@@ -129,7 +129,7 @@ end
 
 local play_sound_hook = play_sound
 function play_sound(sound_code, per, vol)
-	if G.STAGE == G.STAGES.RUN and G.GAME.ThunderEdgeData then
+	if G.STAGE == G.STAGES.RUN and G.GAME.ThunderEdgeData and sound_code then
 		G.GAME.ThunderEdgeData.sfx_played[sound_code] = true
 	end
 	play_sound_hook(sound_code, per, vol)
